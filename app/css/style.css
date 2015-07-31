@@ -3,17 +3,25 @@ html,body {
 }
 
 html {
-	
+	width: 100px;
+  	height: 100px;
+  	position: absolute;
 }
 
 body {
 	-webkit-user-select: none;
+	width: 100px;
+  	height: 100px;
+  	margin: 0;
 }
 
 img {
 	/*-webkit-app-region: drag;*/
 	/*-webkit-user-select: none;*/
 	/*-webkit-user-drag: none;*/
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 button {
