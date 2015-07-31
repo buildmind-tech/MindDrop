@@ -32,6 +32,12 @@ The frontend is built in [AngularJS](https://angularjs.org/).
 * Fun and
 * Because we can
 
+# Development
+
+## 31/07/2015 - Constructed a frameless icon app and made it draggable
+
+* We hacked the nw [-webkit-user-drag](https://github.com/nwjs/nw.js/wiki/Frameless-window) because it disables other html events such as dragover. Now everything that make the icon draggable is based on mousedown and mousemove detection.
+
 # Thanks
 * TonyChol
 
