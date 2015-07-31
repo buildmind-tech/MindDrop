@@ -20,11 +20,17 @@ Upload middleware is using [Multer](https://github.com/expressjs/multer), Downlo
 
 All data are going through the [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel). This method is at first priority when both client are online.
 
+# Frontend
+
+The frontend is built in [AngularJS](https://angularjs.org/).
+
 # Why do we make this?
 
 * UI Practice
 * RTC Practice
 * Get away from dropbox and GFW
+* Fun and
+* Because we can
 
 # Thanks
 * TonyChol
