@@ -1,7 +1,7 @@
 # MindDrop
 A Drop-And-Share Desktop App
 
-# Buildmind
+# Build!
 Clone to local and run 
 
     npm install
@@ -18,7 +18,7 @@ Upload middleware is using [Multer](https://github.com/expressjs/multer), Downlo
 
 ## A server-less share
 
-All data are going through the [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel). This method is at first priority when both client are both online.
+All data are going through the [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel). This method is at first priority when both client are online.
 
 # Why do we make this?
 
