@@ -24,6 +24,18 @@ angular.module('window.contextmenu',[])
 	  key:"x"
 	});
 
+	showMainPageItem.click=function(){
+		gui.Window.open('auth/index.html', {
+		  position: 'center',
+		  width: 300,
+		  height: 500,
+		  focus:true,
+		  frame: false,
+		  toolbar:false,
+		  resizable:false,
+		});
+	}
+
 	exitAppItem.click=function(){
 		gui.App.quit();
 	}
@@ -43,8 +55,16 @@ angular.module('window.contextmenu',[])
 		})
 	}
 
+	var getMenu=function(){
+		return contextmenu
+	}
+
+	var tray = new gui.Tray({ title: 'BuildMindDrop', icon: 'app/icon/icon.png' });
+	tray.menu=contextMenu;
+
 	self={
-		popup:popup
+		popup:popup,
+		getMenu:getMenu
 	}
 
 	return self;

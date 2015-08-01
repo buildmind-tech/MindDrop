@@ -11,41 +11,29 @@
     <!-- <div class="mask"></div> -->
 
     <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-material.min.js"></script>
+    <script type="text/javascript" src="js/angular-animate.min.js"></script>
+    <script type="text/javascript" src="js/angular-aria.min.js"></script>
     <script type="text/javascript" src="js/ng-file-upload.min.js"></script>
 
     <script type="text/javascript" src="js/personal/window.drag.js"></script>
     <script type="text/javascript" src="js/personal/window.contextmenu.js"></script>
+    <script type="text/javascript" src="js/personal/window.ui.js"></script>
     <script type="text/javascript" src="js/personal/window.drop.js"></script>
     <script type="text/javascript" src="js/personal/minddrop.core.js"></script>
     <script type="text/javascript">
-	  	window.gui = require('nw.gui'); //or global.window.nwDispatcher.requireNwGui() (see https://github.com/rogerwang/node-webkit/issues/707)
-
-		// Get the current window
-		window.win = gui.Window.get();
-		
+	  	window.gui = require('nw.gui');
+		window.win = gui.Window.get();	
+		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
 		win.showDevTools();
-
-		
-
-		// document.body.addEventListener('contextmenu', function(ev) { 
-
-		// });
-
-		var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core'];
-
+		var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui'];
+		var coreModules=['ngMaterial'];
 		var thirdPartyModules=['ngFileUpload'];
+		var concatModules=hackModules.concat(thirdPartyModules,coreModules);
 
-
-
-		var concatModules=hackModules.concat(thirdPartyModules)
-		console.log(concatModules)
-		
+		global.angular = angular;
 		angular.module('MindDrop',concatModules)
-		.controller('MainCtrl',function($scope){
-			$scope.fuck=function(){
-				console.log('fxxk')
-			}
-		})
+		.controller('MainCtrl',function($scope){})
 	</script>
   </body>
 
