@@ -59,14 +59,14 @@ img {
 	z-index: 100;
 
 	text-align: left;
-	color: white;
+	/*color: white;*/
 	padding: 20px;
 
-	background: rgba(0,0,0,0.4)
+	background: rgba(255,255,255,0.6);
 }
 
 .auth-container input {
-	color: white;
+	/*color: white;*/
 }
 
 .login-button {

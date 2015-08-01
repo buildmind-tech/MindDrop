@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="auth">
   <head>
   	<meta charset="utf-8">
     <title>Hello World!</title>
@@ -38,7 +38,7 @@
         </md-input-container>     
       </div>
 
-      <md-button class="md-raised login-button">
+      <md-button class="md-raised md-primary login-button">
         Login
       </md-button>
 
@@ -52,22 +52,23 @@
     </div>
 
 
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script type="text/javascript" src="../js/angular-material.min.js"></script>
+    <script type="text/javascript" src="../js/angular-animate.min.js"></script>
+    <script type="text/javascript" src="../js/angular-aria.min.js"></script>
+
+
     <script type="text/javascript">
 	  window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
 		win.showDevTools();
-
-    window.angular=global.angular;
-
 		// var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui'];
 		// var thirdPartyModules=['ngFileUpload'];
 		// var concatModules=hackModules.concat(thirdPartyModules)
 		angular.module('auth',['ngMaterial'])
-    .controller('MainCtrl',function($scope){
+    .controller('MainCtrl',function($scope){})
 
-    })
-
-    angular.bootstrap(document,['auth'])
+    // angular.bootstrap(document,['auth'])
 		// .controller('MainCtrl',function($scope){})
 	</script>
   </body>
