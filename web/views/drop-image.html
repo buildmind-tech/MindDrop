@@ -1,0 +1,15 @@
+<div class='file-container' flex="25" style="margin-bottom: 40px; margin-top: 25px;">
+    <div class='preview-content' style="height: 180px; width: 180px; border: 1px solid #EEEEEE">
+        <img ng-src="{{fileThumbnail(file)}}">
+    </div>
+    <div class="file-info" style="margin-top: 10px;">
+        <div class="file-name-view" style="margin-bottom: 2px;">
+            <span>{{file.name}}.{{file.suffix}}</span>
+        </div>
+        <div class="file-meta-view" style="width: 180px; font-size: 12px;">
+        	<span style="color:#7B7979">{{file.size}} KB</span>
+        	<span style="color:#7B7979; float: right;">{{file.views}} views</span>
+        </div>
+        
+    </div>
+</div>
