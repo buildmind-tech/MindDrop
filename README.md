@@ -38,6 +38,11 @@ The frontend is built in [AngularJS](https://angularjs.org/).
 
 * We hacked the nw [-webkit-user-drag](https://github.com/nwjs/nw.js/wiki/Frameless-window) because it disables other html events such as dragover. Now everything that make the icon draggable is based on mousedown and mousemove detection.
 
+## 01/08/2015 - Backend, drop to upload
+
+* The Backend is ready for both upload and download together with database indexing of all files. All files are currently tracing by its unique uuid and available for everyone
+* The app is ready for drop to upload, and upload records are saved locally on client machines (no cloud backup) .
+
 # Thanks
 * TonyChol
 
