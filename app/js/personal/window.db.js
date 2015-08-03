@@ -27,9 +27,19 @@ angular.module('window.db',[])
 		
 	}
 
+	var getPreferences=function(){
+		if (db) {
+			return db('preferences');
+		}
+		else {
+			return false;
+		}
+	}
+
 	self={
 		setDb:setDb,
-		getRecentFileDb:getRecentFileDb
+		getRecentFileDb:getRecentFileDb,
+		getPreferences:getPreferences
 	}
 
 	return self;

@@ -2,7 +2,7 @@
 <html ng-app="MindDrop">
   <head>
   	<meta charset="utf-8">
-    <title>Hello World!</title>
+    <title>MindDrop</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
   </head>
   <body ng-controller="MainCtrl">
@@ -33,9 +33,10 @@
     <script type="text/javascript" src="js/personal/window.db.js"></script>
     <script type="text/javascript" src="js/personal/minddrop.core.js"></script>
     <script type="text/javascript">
-	  	window.gui = require('nw.gui');
+	  window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
-		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
+    gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
+		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/about.html", "", "", true)
 		win.showDevTools();
 		var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui','window.db'];
 		var coreModules=['ngMaterial'];

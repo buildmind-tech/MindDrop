@@ -32,6 +32,7 @@ angular.module('minddrop.core',[])
 	        }).success(function(data, status, headers, config) {
 	          // file is uploaded successfully
 	          // console.log(data);
+	          data.localPath=files[0].path;
 	          var db=$db.getRecentFileDb();
 	          db.push(data);
 

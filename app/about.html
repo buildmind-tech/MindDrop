@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="MindDrop">
+  <head>
+  	<meta charset="utf-8">
+    <title>關於MindDrop</title>
+    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="css/about-style.css">
+  </head>
+  <body>
+
+  	<div class="frame-top">
+      <img src="icon/icon.png">
+  		<p>關於MindDrop</p>
+  		<i class="ion-close" onclick="closeApp()"></i>
+  	</div>
+
+  	<script type="text/javascript">
+  		window.gui = require('nw.gui');
+  		window.win = gui.Window.get();
+      win.showDevTools();
+  		var closeApp=function(){
+  			win.close();
+  		}
+
+  	</script>
+
+  </body>
+</html>
