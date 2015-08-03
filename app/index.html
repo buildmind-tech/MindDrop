@@ -8,6 +8,15 @@
   <body ng-controller="MainCtrl">
     <img style="width:100px;height:100px;" src="icon/icon.png" ng-click="fuck()">
     <section></section>
+
+    <progress-arc
+      size="100"
+      stroke="rgba(0,0,0,0.4)"
+      stroke-width="50"
+      complete="complete"
+      counter-clockwise="false"
+      background="rgba(0,0,0,0)">
+    </progress-arc>
     <!-- <div class="mask"></div> -->
 
     <script type="text/javascript" src="js/angular.min.js"></script>
@@ -15,25 +24,35 @@
     <script type="text/javascript" src="js/angular-animate.min.js"></script>
     <script type="text/javascript" src="js/angular-aria.min.js"></script>
     <script type="text/javascript" src="js/ng-file-upload.min.js"></script>
+    <script type="text/javascript" src="js/angular-progress-arc.min.js"></script>
 
     <script type="text/javascript" src="js/personal/window.drag.js"></script>
     <script type="text/javascript" src="js/personal/window.contextmenu.js"></script>
     <script type="text/javascript" src="js/personal/window.ui.js"></script>
     <script type="text/javascript" src="js/personal/window.drop.js"></script>
+    <script type="text/javascript" src="js/personal/window.db.js"></script>
     <script type="text/javascript" src="js/personal/minddrop.core.js"></script>
     <script type="text/javascript">
 	  	window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
 		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
 		win.showDevTools();
-		var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui'];
+		var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui','window.db'];
 		var coreModules=['ngMaterial'];
-		var thirdPartyModules=['ngFileUpload'];
+		var thirdPartyModules=['ngFileUpload','angular-progress-arc'];
 		var concatModules=hackModules.concat(thirdPartyModules,coreModules);
-
 		global.angular = angular;
 		angular.module('MindDrop',concatModules)
-		.controller('MainCtrl',function($scope){})
+		.controller('MainCtrl',function($scope){
+      $scope.complete=0;
+      $scope.$on('upload:progress:update',function(ev,data){
+        $scope.complete=data.complete;
+      })
+
+      $scope.$on('upload:complete',function(ev,data){
+        $scope.complete=0;
+      })
+    })
 	</script>
   </body>
 
