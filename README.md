@@ -44,10 +44,10 @@ The frontend is built in [AngularJS](https://angularjs.org/).
 * The app is ready for drop to upload, and upload records are saved locally on client machines (no cloud backup) .
 
 
-## 03/08/2015 - Recent upload and clipboard
+## 03/08/2015 - Recent upload and item function 
 
-* Right click on the float menu will pop up a context menu contains the recent file list, a checkbox, a few debug button and about page indicator.
-* Hover on the recent file in the context menu will continue you into the submenu, different subitems are fully funcional now, for details please see contextmenu of minddrop.
+* Right click on the float menu will pop up a context menu contains the recent file list, a few checkboexx, a few debug buttons and the about page indicator.
+* Hover on the recent file in the context menu will continue you into the submenu, different subitems are fully functional now, for details please see contextmenu of mind-drop.
 
 # Thanks
 * TonyChol
