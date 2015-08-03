@@ -42,7 +42,8 @@ The frontend is built in [AngularJS](https://angularjs.org/).
 
 * The Backend is ready for both upload and download together with database indexing of all files. All files are currently tracing by its unique uuid and available for everyone
 * The app is ready for drop to upload, and upload records are saved locally on client machines (no cloud backup) .
-* 
+
+
 ## 03/08/2015 - Recent upload and clipboard
 
 * Right click on the float menu will pop up a context menu contains the recent file list.
