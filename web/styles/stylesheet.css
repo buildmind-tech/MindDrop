@@ -1,5 +1,26 @@
 .md-toolbar-tools h1 {
-  font-size: inherit;
-  font-weight: inherit;
-  margin: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: inherit;
+}
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    height: 80px;
+    text-align: center;
+    margin: 10px;
+    display: table;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 256px;
+}
+
+.dragover {
+    border: 5px dashed blue;
+}
+
+.drop--box-text {
+        display: table-cell;
+        vertical-align: middle;
 }

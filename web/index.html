@@ -17,11 +17,19 @@
         </div>
     </md-toolbar>
     <div layout="row" flex>
-        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2 md-padding" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+            <md-content layout="column" class="md-padiding">
+                DROP HERE
+                <md-button class="md-primary md-raised">Upload file</md-button>
+                <div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"accept="image/*,application/pdf">
+                        <span class="drop--box-text">Drop here or click to upload</span>
+                </div>
+
+            </md-content>
         </md-sidenav>
         <div layout="column" flex id="content">
-            <md-content layout="column" flex class="md-padding"  style="flex-wrap: wrap;">
-            <drop-file ng-repeat="file in dropFiles" file="file"></drop-file>
+            <md-content layout="row" flex class="md-padding" style="flex-wrap: wrap;">
+                <drop-file ng-repeat="file in dropFiles" file="file"></drop-file>
             </md-content>
         </div>
     </div>
@@ -30,8 +38,13 @@
     <script src="lib/js/angular-animate.min.js"></script>
     <script src="lib/js/angular-aria.min.js"></script>
     <script src="lib/js/angular-material.min.js"></script>
+
+    <!-- Script for upload file: https://github.com/danialfarid/ng-file-upload -->
+    <script src="lib/js/ng-file-upload/ng-file-upload-shim.min.js"></script>
+    <script src="lib/js/ng-file-upload/ng-file-upload.min.js"></script> 
+
     <script>
-    var app = angular.module('StarterApp', ['ngMaterial','tonychol.imageviewDirective']);
+    var app = angular.module('StarterApp', ['ngMaterial', 'tonychol.imageviewDirective']);
     </script>
     <script src="scripts/directives/tonycholImageviewDirective.js"></script>
 </body>
