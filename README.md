@@ -46,8 +46,8 @@ The frontend is built in [AngularJS](https://angularjs.org/).
 
 ## 03/08/2015 - Recent upload and clipboard
 
-* Right click on the float menu will pop up a context menu contains the recent file list.
-* Click on the recent file in the context menu will programatically copy to your clipboard and you can paste them anywhere else.
+* Right click on the float menu will pop up a context menu contains the recent file list, a checkbox, a few debug button and about page indicator.
+* Hover on the recent file in the context menu will continue you into the submenu, different subitems are fully funcional now, for details please see contextmenu of minddrop.
 
 # Thanks
 * TonyChol
