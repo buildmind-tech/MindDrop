@@ -19,70 +19,8 @@ angular.module('window.contextmenu',[])
 	var preferences = $db.getPreferences();
 	var tray = new gui.Tray({ title: 'BuildMindDrop', icon: 'app/icon/icon.png' });
 
-
-	var showMainPageItem = new gui.MenuItem({
-	  type: "normal", 
-	  label: "顯示主頁面",
-	});
-
-	var refreshPageItem = new gui.MenuItem({
-	  type: "normal", 
-	  label: "刷新",
-	});
-
-	var exitAppItem = new gui.MenuItem({
-	  type: "normal", 
-	  label: "退出MindDrop",
-	  key:"x"
-	});
-
-	var goToMindDropItem = new gui.MenuItem({
-	  type: "normal", 
-	  label: "前往MindDrop"
-	});
-
-	goToMindDropItem.click=function(){
-		gui.Shell.openExternal('http://drop.buildmind.org');
-	}
-
-	var aboutItem = new gui.MenuItem({
-	  	type: "normal", 
-	  	label: "關於"
-	});
-
-	aboutItem.click=function(){
-		gui.Window.open('about.html', {
-		  position: 'center',
-		  width: 450,
-		  height: 350,
-		  focus:true,
-		  frame: false,
-		  toolbar:false,
-		  resizable:false,
-		  transparent:true,
-		  icon:"app/icon/icon.png",
-		});
-	}
-
-	showMainPageItem.click=function(){
-		gui.Window.open('auth/index.html', {
-		  position: 'center',
-		  width: 300,
-		  height: 500,
-		  focus:true,
-		  frame: false,
-		  toolbar:false,
-		  resizable:false,
-		});
-	}
-
-	refreshPageItem.click=function(){
-		location.reload();
-	}
-
-	exitAppItem.click=function(){
-		gui.App.quit();
-	}
+	var contextMenu;
+	
 
 	var constructRecentItems=function(){
 		var db=$db.getRecentFileDb();
@@ -96,10 +34,97 @@ angular.module('window.contextmenu',[])
 
 	var constructMenu=function(){
 
-		var contextMenu = new gui.Menu();
+		if (contextMenu) {
+			self.clean(contextMenu);
+		}
+		
 
-		// console.log(contextMenu.items);
-		// console.log(contextMenu.items.length)
+		contextMenu = new gui.Menu();
+
+		var showMainPageItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "顯示主頁面",
+		});
+
+		var refreshPageItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "刷新",
+		});
+
+		var exitAppItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "退出MindDrop",
+		  key:"x"
+		});
+
+		var goToMindDropItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "前往MindDrop"
+		});
+
+
+		goToMindDropItem.click=function(){
+			gui.Shell.openExternal('http://drop.buildmind.org');
+		}
+
+		var goToScreenCrop = new gui.MenuItem({
+		  type: "normal", 
+		  label: "截取屏幕"
+		});
+
+		goToScreenCrop.click=function(){
+			// console.log(screen)
+			gui.Window.open('crop.html', {
+			  position: 'center',
+			  width: screen.width,
+			  height: screen.height,
+			  focus:true,
+			  frame: false,
+			  toolbar:false,
+			  resizable:false,
+			  transparent:true,
+			  icon:"app/icon/icon.png",
+			});
+		}
+
+		var aboutItem = new gui.MenuItem({
+		  	type: "normal", 
+		  	label: "關於"
+		});
+
+		aboutItem.click=function(){
+			gui.Window.open('about.html', {
+			  position: 'center',
+			  width: 450,
+			  height: 350,
+			  focus:true,
+			  frame: false,
+			  toolbar:false,
+			  resizable:false,
+			  transparent:true,
+			  icon:"app/icon/icon.png",
+			});
+		}
+
+		showMainPageItem.click=function(){
+			gui.Window.open('auth/index.html', {
+			  position: 'center',
+			  width: 300,
+			  height: 500,
+			  focus:true,
+			  frame: false,
+			  toolbar:false,
+			  resizable:false,
+			});
+		}
+
+		refreshPageItem.click=function(){
+			location.reload();
+		}
+
+		exitAppItem.click=function(){
+			gui.App.quit();
+		}
 
 		contextMenu.append(showMainPageItem);  // 0
 		contextMenu.append(refreshPageItem);   // 1
@@ -180,17 +205,23 @@ angular.module('window.contextmenu',[])
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -4
 
 
+
+		contextMenu.append(goToScreenCrop); // -1
+
+		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -2
+
+
 		var uploadCompleteNotificationCheck = new gui.MenuItem({
 		  	type: "checkbox", 
 		  	label: "關閉上傳完成提示"
 		});
 
-		if (JSON.parse(window.localStorage.uploadCompleteNotificationCheck)==true) {
+		if (window.localStorage.uploadCompleteNotificationCheck && JSON.parse(window.localStorage.uploadCompleteNotificationCheck)==true) {
 			uploadCompleteNotificationCheck.checked=true;
 		}
 
 		uploadCompleteNotificationCheck.click = function(){
-			if (JSON.parse(window.localStorage.uploadCompleteNotificationCheck)==true) {
+			if (window.localStorage.uploadCompleteNotificationCheck && JSON.parse(window.localStorage.uploadCompleteNotificationCheck)==true) {
 				window.localStorage.uploadCompleteNotificationCheck=false;
 			}
 			else {
@@ -203,12 +234,12 @@ angular.module('window.contextmenu',[])
 		  	label: "關閉新通知提示"
 		});
 
-		if (JSON.parse(window.localStorage.newPushCheck)==true) {
+		if (window.localStorage.newPushCheck && JSON.parse(window.localStorage.newPushCheck)==true) {
 			newPushCheck.checked=true;
 		}
 
 		newPushCheck.click = function(){
-			if (JSON.parse(window.localStorage.newPushCheck)==true) {
+			if (window.localStorage.newPushCheck && JSON.parse(window.localStorage.newPushCheck)==true) {
 				window.localStorage.newPushCheck=false;
 			}
 			else {
@@ -238,6 +269,12 @@ angular.module('window.contextmenu',[])
 		contextMenu.popup(x,y);
 	}
 
+	var clean=function(contextMenu){
+		contextMenu.items.forEach(function(item){
+			contextMenu.remove(item)
+		})
+	}
+
 	// var getTray=function(){
 	// 	return tray;
 	// }
@@ -245,12 +282,10 @@ angular.module('window.contextmenu',[])
 
 	self={
 		popup:popup,
+		clean:clean,
 		constructMenu:constructMenu,
 		constructRecentItems:constructRecentItems,
 	}
-
-	
-	
 
 	return self;
 

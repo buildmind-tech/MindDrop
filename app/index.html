@@ -35,9 +35,12 @@
     <script type="text/javascript">
 	  window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
+    gui.Screen.Init();
+    win.showDevTools();
+    window.screen=gui.Screen.screens[0];
     gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
-		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/about.html", "", "", true)
-		win.showDevTools();
+    gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/about.html", "", "", true)
+		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/crop.html", "", "", true)
 		var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui','window.db'];
 		var coreModules=['ngMaterial'];
 		var thirdPartyModules=['ngFileUpload','angular-progress-arc'];

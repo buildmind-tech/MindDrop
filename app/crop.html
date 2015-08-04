@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html ng-app="MindDrop">
+  <head>
+  	<meta charset="utf-8">
+    <title>關於MindDrop</title>
+    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="css/crop/cropper.min.css">
+    <link rel="stylesheet" type="text/css" href="css/crop-style.css">
+  </head>
+  <body style="background-color:rgba(0,0,0,0);">
+
+  	<!-- <div class="frame-top">
+      <img src="icon/icon.png">
+  		<p>關於MindDrop</p>
+  		<i class="ion-close" onclick="closeApp()"></i>
+  	</div> -->
+
+    <div class="exit-banner">按Exit可以隨時退出</div>
+
+    <video id="video" style="position:absolute;top:0;left:0;width:100%;"></video>
+    <canvas id="canvas" style="position:absolute;top:0;left:0;z-index:1;"></canvas>
+    <canvas id="crop" style="position:absolute;top:0;left:0;z-index:1;"></canvas>
+    <div id="photo-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;">
+      <img id="photo" style="position:absolute;top:0;left:0;width:100%;z-index:2;">
+    </div>
+    
+    <div id="cover" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;"></div>
+
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/cropper.min.js"></script>
+
+
+
+  	<script type="text/javascript">
+  		window.gui = require('nw.gui');
+  		window.win = gui.Window.get();
+      // win.showDevTools();
+
+      gui.Screen.Init();
+
+      var screen=gui.Screen.screens[0].bounds;
+
+      $('#canvas').width(screen.width);
+      $('#canvas').height(screen.height);
+
+      var video=document.getElementById("video");
+      var canvas=document.getElementById("canvas");
+      var crop=document.getElementById("crop");
+      var photo=document.getElementById("photo");
+      var cover=document.getElementById("cover");
+      var stream;
+
+      // win.enterFullscreen()
+      
+
+  		var closeApp=function(){
+  			win.close();
+  		}
+
+      $(document).bind('keydown',function(e){
+        if (e.which==27) {
+          win.close();
+        }
+      })
+
+
+      // var canvas = document.getElementById("canvas");
+      // document.getElementById("photo").src=canvas.toDataURL("image/png");
+
+
+      // gui.Screen.chooseDesktopMedia(["window","screen"], 
+      //   function(streamId) {
+          // console.log(streamId)
+
+          var constraint = {
+            mandatory: {
+              chromeMediaSource: 'desktop', 
+              chromeMediaSourceId: 'screen:0', 
+              maxWidth: 1920, 
+              maxHeight: 1080
+            }, 
+            optional: []
+          };
+          navigator.webkitGetUserMedia({audio: false, video: constraint},function(_stream){
+            video.src=URL.createObjectURL(_stream);
+            stream=_stream;
+
+            console.log('successfully get!')
+          }, function(err){
+            console.log(err)
+          });
+
+        // }
+      // );
+
+      video.oncanplay=function(){
+        // $('#video').remove();
+        canvas.width=screen.width;
+        canvas.height=screen.height;
+
+        var context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        photo.src=canvas.toDataURL("image/png");
+        stream.stop();
+
+        cover.style.backgroundColor='rgba(0,0,0,0.5)';
+
+        win.enterFullscreen()
+
+
+        // $('img#photo').imgAreaSelect({
+        //     handles: true,
+        //     keys:true,
+        //     onSelectEnd: function(data,selection){
+        //       // console.log(data)
+        //       // var base=data.getAttribute('src').replace(/^data:image\/png;base64,/, "");
+
+        //       console.log(selection);
+
+        //       crop.width=selection.width;
+        //       crop.height=selection.height;
+
+        //       var context = crop.getContext('2d');
+        //       context.drawImage(photo, selection.x1, selection.y1, crop.width, crop.height);
+
+              
+              // win.close();
+            // }
+        // });
+
+        $('#photo-container > #photo').cropper({
+          autoCropArea: 0.5,
+          zoomable:false,
+          movable:false,
+        });
+
+        $(document).bind('keydown',function(e){
+          if (e.which==13) {
+            var base=$('#photo-container > #photo').cropper('getCroppedCanvas').toDataURL("image/png").replace(/^data:image\/png;base64,/, "")
+            require("fs").writeFile("temp/screenshot.png", base, 'base64', function(err) {
+              win.close()
+              console.log(err);
+            });
+          }
+        })
+        
+      }
+     
+      // win.capturePage(function(uri){
+      // // do something with the buffer
+      //   console.log('screen captured')
+      //   console.log(uri);
+      //   document.getElementById("photo").src=uri;
+      // }, { format : 'png', datatype : 'datauri'});
+
+      // $(document).ready(function () {
+      //     $('img#photo').imgAreaSelect({
+      //         handles: true,
+      //         onSelectEnd: someFunction
+      //     });
+      // });
+
+  	</script>
+
+  </body>
+</html>
