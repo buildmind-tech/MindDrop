@@ -1,4 +1,4 @@
-# MindDrop
+# MindDrop [![Build Status](https://travis-ci.org/buildmind-tech/MindDrop.svg?branch=master)](https://travis-ci.org/buildmind-tech/MindDrop)
 A Drop-And-Share Desktop App
 
 # Build!
