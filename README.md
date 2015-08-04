@@ -34,20 +34,7 @@ The frontend is built in [AngularJS](https://angularjs.org/).
 
 # Development
 
-## 31/07/2015 - Constructed a frameless icon app and made it draggable
-
-* We hacked the nw [-webkit-user-drag](https://github.com/nwjs/nw.js/wiki/Frameless-window) because it disables other html events such as dragover. Now everything that make the icon draggable is based on mousedown and mousemove detection.
-
-## 01/08/2015 - Backend, drop to upload
-
-* The Backend is ready for both upload and download together with database indexing of all files. All files are currently tracing by its unique uuid and available for everyone
-* The app is ready for drop to upload, and upload records are saved locally on client machines (no cloud backup) .
-
-
-## 03/08/2015 - Recent upload and item function 
-
-* Right click on the float menu will pop up a context menu contains the recent file list, a few checkboexx, a few debug buttons and the about page indicator.
-* Hover on the recent file in the context menu will continue you into the submenu, different subitems are fully functional now, for details please see contextmenu of mind-drop.
+Please refer to [Development](https://github.com/buildmind-tech/MindDrop/wiki/Development-Handbook) Wiki Page.
 
 # Thanks
 * TonyChol
