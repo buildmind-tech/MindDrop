@@ -40,7 +40,9 @@ Please refer to [Development](https://github.com/buildmind-tech/MindDrop/wiki/De
 
 ## 2015/08/06 -  v0.1.0
 
-This product is in alpha phase, an alpha release (nw bundle will be out soon)
+This product is in alpha phase, an alpha [release](https://github.com/buildmind-tech/MindDrop/releases/tag/v0.1.0-alpha).
+
+Debug mode is on and devtools are opened at opening, source code are not zipped.
 
 # Thanks
 * TonyChol
