@@ -36,6 +36,12 @@ The frontend is built in [AngularJS](https://angularjs.org/).
 
 Please refer to [Development](https://github.com/buildmind-tech/MindDrop/wiki/Development-Handbook) Wiki Page.
 
+# Releases
+
+## 2015/08/06 -  v0.1.0
+
+This product is in alpha phase, an alpha release (nw bundle will be out soon)
+
 # Thanks
 * TonyChol
 
