@@ -12,7 +12,10 @@ angular.module('minddrop.core',[])
 			console.log(files);
 
 		if (isDirectory) {
-
+			return;
+		}
+		else if (files[0].size > 20*1024*1024) {
+			alert('The file is too big! Currently alpha release only support 20MB single file.')
 		}
 		else {
 
