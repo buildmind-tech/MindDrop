@@ -159,7 +159,7 @@ angular.module('window.contextmenu',[])
 				});
 
 				copyItem.click=function(){
-					clipboard.set('http://drop.buildmind.org/download/'+item.uuid, 'text');
+					clipboard.set('http://drop.buildmind.org/share/'+item.uuid, 'text');
 				};
 
 				var openInFolderItem = new gui.MenuItem({
@@ -177,7 +177,7 @@ angular.module('window.contextmenu',[])
 				});
 
 				openInBrowserItem.click=function(){
-					gui.Shell.openExternal('http://www.buildmind.org/drop');
+					gui.Shell.openExternal('http://drop.buildmind.org/share/'+item.uuid);
 				}
 
 				
@@ -200,6 +200,28 @@ angular.module('window.contextmenu',[])
 			
 				contextMenu.append(menuitem);
 			})
+
+			if ($db.getRecentFileDb().value().length>5) {
+				var moreFileItem=new gui.MenuItem({
+				  type: "normal", 
+				  label: "更多...",
+				});
+
+				moreFileItem.click=function(){
+
+				}
+
+				contextMenu.append(moreFileItem);
+
+				var leftFileItem=new gui.MenuItem({
+					type:"normal",
+					label:"還有"+ ($db.getRecentFileDb().value().length-5) +"個文件"
+				})
+
+				leftFileItem.enabled=false;
+
+				contextMenu.append(leftFileItem);
+			}
 		}
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -4
