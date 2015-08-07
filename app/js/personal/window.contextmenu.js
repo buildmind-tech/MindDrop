@@ -10,8 +10,7 @@ angular.module('window.contextmenu',[])
   		$contextMenu.popup(e.x, e.y);
  		return false;
 	})
-})
-	
+})	
 
 .factory('$contextMenu',function($db){
 	var self=this;
@@ -40,6 +39,24 @@ angular.module('window.contextmenu',[])
 		
 
 		contextMenu = new gui.Menu();
+
+		var uploadFileItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "上傳文件",
+		});
+
+		uploadFileItem.click=function(){
+			document.getElementById('fileDialog').click();
+		}
+
+		var uploadFolderItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "上傳文件夾",
+		});
+
+		uploadFolderItem.click=function(){
+			document.getElementById('folderDialog').click();
+		}
 
 		var showMainPageItem = new gui.MenuItem({
 		  type: "normal", 
@@ -125,6 +142,11 @@ angular.module('window.contextmenu',[])
 		exitAppItem.click=function(){
 			gui.App.quit();
 		}
+
+		contextMenu.append(uploadFileItem); 
+		contextMenu.append(uploadFolderItem); 
+
+		contextMenu.append(new gui.MenuItem({ type: 'separator' }));
 
 		contextMenu.append(showMainPageItem);  // 0
 		contextMenu.append(refreshPageItem);   // 1

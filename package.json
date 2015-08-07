@@ -18,6 +18,7 @@
     "min_height": 100
   },
   "dependencies": {
-    "lowdb": "^0.10.2"
+    "lowdb": "^0.10.2",
+    "archiver":"*"
   }
 }

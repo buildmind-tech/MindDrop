@@ -25,6 +25,10 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
+build
+temp/*
+dbs/*
+
 locales
 credits.html
 d3dcompiler_47.dll
@@ -36,5 +40,5 @@ nw.pak
 nwjc.exe
 pdf.dll
 icudtl.dat
-temp/*
-dbs/*
+
+nw-build.js

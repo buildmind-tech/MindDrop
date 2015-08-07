@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
   </head>
   <body ng-controller="MainCtrl">
+    <input style="display:none;" id="fileDialog" type="file" file-input="upload()"/>
+    <input style="display:none;" id="folderDialog" type="file" nwdirectory file-input="upload()"/>
     <img style="width:100px;height:100px;" src="icon/icon.png" ng-click="fuck()">
     <section></section>
 
@@ -49,10 +51,13 @@
 		angular.module('MindDrop',concatModules)
 		.controller('MainCtrl',function($scope){
       $scope.complete=0;
+      $scope.upload=function(){
+
+      }
+
       $scope.$on('upload:progress:update',function(ev,data){
         $scope.complete=data.complete;
       })
-
       $scope.$on('upload:complete',function(ev,data){
         $scope.complete=0;
       })
