@@ -35,7 +35,7 @@
   	<script type="text/javascript">
   		window.gui = require('nw.gui');
   		window.win = gui.Window.get();
-      // win.showDevTools();
+      win.showDevTools();
 
       gui.Screen.Init();
 
@@ -76,7 +76,7 @@
           var constraint = {
             mandatory: {
               chromeMediaSource: 'desktop', 
-              chromeMediaSourceId: 'screen:0', 
+              chromeMediaSourceId: 'screen:'+gui.Screen.screens[0].id, 
               maxWidth: 1920, 
               maxHeight: 1080
             }, 
@@ -107,7 +107,15 @@
 
         cover.style.backgroundColor='rgba(0,0,0,0.5)';
 
-        win.enterFullscreen()
+        if (process.platform=='darwin') {
+          setTimeout(function(){
+            win.enterFullscreen();
+          },500)
+        }
+        else {
+          win.enterFullscreen();
+        }
+        
 
 
         // $('img#photo').imgAreaSelect({

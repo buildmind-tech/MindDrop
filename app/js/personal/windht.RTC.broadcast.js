@@ -47,12 +47,13 @@ angular.module('windht.RTC.broadcast',[])
 			return;
 		}
 
+
 		navigator.getUserMedia({
 			audio: false, 
 			video: {
 				mandatory: {
 			        chromeMediaSource: 'desktop', 
-			        chromeMediaSourceId: 'screen:0', 
+			        chromeMediaSourceId: 'screen:'+gui.Screen.screens[0].id, 
 			        maxWidth: 1920, 
 			        maxHeight: 1080
 			    }, 
