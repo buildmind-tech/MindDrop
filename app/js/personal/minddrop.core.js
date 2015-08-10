@@ -13,7 +13,7 @@ angular.module('minddrop.core',[])
 })
 
 
-.factory('$MindDrop',function(Upload,$db,$rootScope,$filter){
+.factory('$MindDrop',function(Upload,$db,$rootScope,$filter,$broadcast){
 
 	var fs=require('fs');
 	var archiver = require('archiver');
@@ -106,8 +106,18 @@ angular.module('minddrop.core',[])
 	}
 
 
+	var shareScreen=function(){
+	    $broadcast.start();
+	}
+
+	var stopScreenSharing=function(){
+		$broadcast.stop();
+	}
+
 	self={
-		upload:upload
+		upload:upload,
+		shareScreen:shareScreen,
+		stopScreenSharing:stopScreenSharing
 	}
 
 	return self;

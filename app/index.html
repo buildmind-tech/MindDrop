@@ -34,6 +34,13 @@
     <script type="text/javascript" src="js/personal/window.drop.js"></script>
     <script type="text/javascript" src="js/personal/window.db.js"></script>
     <script type="text/javascript" src="js/personal/minddrop.core.js"></script>
+
+    <!-- Socket -->
+    <script type="text/javascript" src="js/socket/socket.io-1.3.5.js"></script>
+    <script type="text/javascript" src="js/socket/socket.min.js"></script>
+
+
+    <script type="text/javascript" src="js/personal/windht.RTC.broadcast.js"></script>
     <script type="text/javascript">
 	  window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
@@ -43,9 +50,9 @@
     gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
     gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/about.html", "", "", true)
 		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/crop.html", "", "", true)
-		var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui','window.db'];
+		var hackModules=['windht.RTC.broadcast','window.drag','window.contextmenu','window.drop','minddrop.core','window.ui','window.db'];
 		var coreModules=['ngMaterial'];
-		var thirdPartyModules=['ngFileUpload','angular-progress-arc'];
+		var thirdPartyModules=['ngFileUpload','angular-progress-arc','btford.socket-io'];
 		var concatModules=hackModules.concat(thirdPartyModules,coreModules);
 		global.angular = angular;
 		angular.module('MindDrop',concatModules)
@@ -60,6 +67,19 @@
       })
       $scope.$on('upload:complete',function(ev,data){
         $scope.complete=0;
+      })
+    })
+    .factory('socket',function(socketFactory){
+      return socketFactory({
+        // ioSocket:io.connect('http://106.185.45.236:8888')
+        ioSocket:io.connect('http://drop.buildmind.org')
+      })
+    })
+    .run(function(socket){
+
+      socket.on('connect',function(){
+        socket.id=io.managers[Object.keys(io.managers)[0]].engine.id;
+        window.socket_id=socket.id;
       })
     })
 	</script>

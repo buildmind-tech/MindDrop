@@ -12,7 +12,7 @@ angular.module('window.contextmenu',[])
 	})
 })	
 
-.factory('$contextMenu',function($db){
+.factory('$contextMenu',function($db,$MindDrop){
 	var self=this;
 	var clipboard = gui.Clipboard.get();
 	var preferences = $db.getPreferences();
@@ -84,26 +84,7 @@ angular.module('window.contextmenu',[])
 			gui.Shell.openExternal('http://drop.buildmind.org');
 		}
 
-		var goToScreenCrop = new gui.MenuItem({
-		  type: "normal", 
-		  label: "截取屏幕"
-		});
-
-		goToScreenCrop.click=function(){
-			// console.log(screen)
-			gui.Window.open('crop.html', {
-			  position: 'center',
-			  width: screen.width,
-			  height: screen.height,
-			  focus:true,
-			  frame: false,
-			  toolbar:false,
-			  resizable:false,
-			  transparent:true,
-			  icon:"app/icon/icon.png",
-			});
-		}
-
+		
 		var aboutItem = new gui.MenuItem({
 		  	type: "normal", 
 		  	label: "關於"
@@ -249,8 +230,91 @@ angular.module('window.contextmenu',[])
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -4
 
 
+		var goToScreenCrop = new gui.MenuItem({
+		  type: "normal", 
+		  label: "截取屏幕"
+		});
+
+		goToScreenCrop.click=function(){
+			// console.log(screen)
+			gui.Window.open('crop.html', {
+			  position: 'center',
+			  width: screen.width,
+			  height: screen.height,
+			  focus:true,
+			  frame: false,
+			  toolbar:false,
+			  resizable:false,
+			  transparent:true,
+			  icon:"app/icon/icon.png",
+			});
+		}
 
 		contextMenu.append(goToScreenCrop); // -1
+
+		
+
+		if (!window.sharingScreen) {
+			var startScreenSharing = new gui.MenuItem({
+			  type: "normal", 
+			  label: "開始分享屏幕"
+			});
+
+			startScreenSharing.click=function(){
+				$MindDrop.shareScreen();
+			}
+
+
+
+			contextMenu.append(startScreenSharing);
+		}
+		else if (window.sharingScreen==true) {
+			var selectScreenSharing = new gui.MenuItem({
+			  type: "normal", 
+			  label: "屏幕分享中"
+			});
+
+
+			var submenu = new gui.Menu();
+
+			var copyLinkItem = new gui.MenuItem({
+			  type: "normal", 
+			  label: "拷貝觀看鏈接",
+			});
+
+			copyLinkItem.click=function(){
+				clipboard.set('http://drop.buildmind.org/share-screen/'+window.socket_id, 'text');
+			};
+
+			var copyCodeItem = new gui.MenuItem({
+			  type: "normal", 
+			  label: "拷貝觀看代碼",
+			});
+
+			copyCodeItem.click=function(){
+				clipboard.set(window.socket_id, 'text');
+			};
+
+
+			var stopItem = new gui.MenuItem({
+			  type: "normal", 
+			  label: "停止屏幕分享",
+			});
+
+			stopItem.click=function(){
+				$MindDrop.stopScreenSharing();
+			};
+
+			submenu.append(copyLinkItem);
+			submenu.append(copyCodeItem);
+			submenu.append(stopItem);
+
+			selectScreenSharing.submenu=submenu;
+
+
+			contextMenu.append(selectScreenSharing);
+		}
+
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -2
 
