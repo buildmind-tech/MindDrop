@@ -262,6 +262,7 @@ angular.module('window.contextmenu',[])
 
 			startScreenSharing.click=function(){
 				$MindDrop.shareScreen();
+				clipboard.set('http://drop.buildmind.org/share-screen/'+window.socket_id, 'text');
 			}
 
 
