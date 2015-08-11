@@ -12,13 +12,15 @@ angular.module('window.contextmenu',[])
 	})
 })	
 
-.factory('$contextMenu',function($db,$MindDrop){
+.factory('$contextMenu',function($db,$MindDrop,$auth,socket){
 	var self=this;
 	var clipboard = gui.Clipboard.get();
 	var preferences = $db.getPreferences();
 	var tray = new gui.Tray({ title: 'BuildMindDrop', icon: 'app/icon/icon.png' });
 
 	var contextMenu;
+
+	
 	
 
 	var constructRecentItems=function(){
@@ -60,11 +62,7 @@ angular.module('window.contextmenu',[])
 			document.getElementById('folderDialog').click();
 		}
 
-		var showMainPageItem = new gui.MenuItem({
-		  type: "normal", 
-		  label: "顯示主頁面",
-		  icon:"app/icon/context-menu/account.png"
-		});
+		
 
 		var refreshPageItem = new gui.MenuItem({
 		  type: "normal", 
@@ -108,17 +106,8 @@ angular.module('window.contextmenu',[])
 			});
 		}
 
-		showMainPageItem.click=function(){
-			gui.Window.open('auth/index.html', {
-			  position: 'center',
-			  width: 300,
-			  height: 500,
-			  focus:true,
-			  frame: false,
-			  toolbar:false,
-			  resizable:false,
-			});
-		}
+
+
 
 		refreshPageItem.click=function(){
 			location.reload();
@@ -133,7 +122,56 @@ angular.module('window.contextmenu',[])
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' }));
 
-		contextMenu.append(showMainPageItem);  // 0
+
+		if (window.localStorage['loggedin']=='true') {
+			var accountItem = new gui.MenuItem({
+			  type: "normal", 
+			  label: window.localStorage['usernickname'],
+			  icon:"app/icon/context-menu/account.png"
+			});
+
+			accountItem.enabled=false;
+
+			var logoutItem = new gui.MenuItem({
+			  type: "normal", 
+			  label: "註銷",
+			});
+
+			logoutItem.click = function(){
+				$auth.logout().then(function(){
+					socket.then(function(socket){
+						socket.disconnect();
+					})
+				});
+			}
+
+			contextMenu.append(accountItem);
+			contextMenu.append(logoutItem);
+		}
+		else {
+			var showLoginPageItem = new gui.MenuItem({
+			  type: "normal", 
+			  label: "請登錄",
+			  icon:"app/icon/context-menu/account.png"
+			});
+
+			showLoginPageItem.click=function(){
+				gui.Window.open('auth/index.html', {
+				  position: 'center',
+				  width: 300,
+				  height: 500,
+				  focus:true,
+				  frame: false,
+				  toolbar:false,
+				  resizable:false,
+				});
+			}
+
+			contextMenu.append(showLoginPageItem);  // 0
+		}
+
+		
+
 		contextMenu.append(refreshPageItem);   // 1
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // 3

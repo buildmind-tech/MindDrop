@@ -26,7 +26,7 @@
       <div layout layout-sm="column">
         <md-input-container flex>
             <label>First name</label>
-            <input ng-model="user.useinfo">
+            <input ng-model="user.userinfo">
         </md-input-container>
         
       </div>
@@ -38,7 +38,7 @@
         </md-input-container>     
       </div>
 
-      <md-button class="md-raised md-primary login-button">
+      <md-button class="md-raised md-primary login-button" ng-click="login()">
         Login
       </md-button>
 
@@ -58,16 +58,46 @@
     <script type="text/javascript" src="../js/angular-aria.min.js"></script>
     <script type="text/javascript" src="../js/angular-progress-arc.min.js"></script>
 
+    <script type="text/javascript" src="../js/personal/windht.auth.js"></script>
+
+
 
     <script type="text/javascript">
+
+    window.eventEmitter=global.eventEmitter;
 	  window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
 		win.showDevTools();
 		// var hackModules=['window.drag','window.contextmenu','window.drop','minddrop.core','window.ui'];
 		// var thirdPartyModules=['ngFileUpload'];
 		// var concatModules=hackModules.concat(thirdPartyModules)
-		angular.module('auth',['ngMaterial'])
-    .controller('MainCtrl',function($scope){})
+		angular.module('auth',['ngMaterial','windht.auth'])
+    .run(function($auth){
+      $auth.auth().then(function(data){
+        console.log(data)
+      },function(err){
+        console.log(err)
+      })
+
+      angular.element(document).bind('contextmenu',function(e){
+        e.preventDefault();
+      })
+
+      
+    })
+    .controller('MainCtrl',function($scope,$auth){
+      $scope.login=function(){
+        console.log($scope.user);
+
+        $auth.login($scope.user).then(function(data){
+          console.log(data);
+          eventEmitter.emit('login:success');
+          win.close()
+        });
+      }
+    })
+
+
 
     // angular.bootstrap(document,['auth'])
 		// .controller('MainCtrl',function($scope){})

@@ -245,38 +245,41 @@ angular.module('windht.RTC.broadcast',[])
 		}
 	}
 
-	socket.on('broadcast',function(data){
-    	switch (data.type) {
+	socket.then(function(socket){
+		socket.on('broadcast',function(data){
+    		switch (data.type) {
+	    		// case 'broadcast:request':
+	    		// 	if (localCamera || localScreen) {
+	    		// 		// socket.emit('rtc',{
+	    		// 		// 	type:'broadcast:start'
+	    		// 		// })
+	    		// 		self.start(true,{},data.config);
+	    		// 	}
+	    		// 	else {
+	    		// 		socket.emit('rtc',{
+	    		// 			type:'broadcast:not:start'
+	    		// 		})
+	    		// 	}
+	    		// 	break;
+	    		case 'remote:candidate':
+	    			console.log('get remote ' + data.source +' candidate!')
+	    			if (peerConnections[data.id] && peerConnections[data.id][data.source]) {
+	    				peerConnections[data.id][data.source].addIceCandidate(new RTCIceCandidate(data.candidate));
+	    			}
+	    			break;
 
-    		// case 'broadcast:request':
-    		// 	if (localCamera || localScreen) {
-    		// 		// socket.emit('rtc',{
-    		// 		// 	type:'broadcast:start'
-    		// 		// })
-    		// 		self.start(true,{},data.config);
-    		// 	}
-    		// 	else {
-    		// 		socket.emit('rtc',{
-    		// 			type:'broadcast:not:start'
-    		// 		})
-    		// 	}
-    		// 	break;
-    		case 'remote:candidate':
-    			console.log('get remote ' + data.source +' candidate!')
-    			if (peerConnections[data.id] && peerConnections[data.id][data.source]) {
-    				peerConnections[data.id][data.source].addIceCandidate(new RTCIceCandidate(data.candidate));
-    			}
-    			break;
+	    		case 'remote:offer':
+	    			console.log('get remote '+ data.source +' offer!')
+	    			if (!peerConnections[data.id] || (peerConnections[data.id] && !peerConnections[data.id][data.source])) {
+	    				self.responseBroadcast(data.id,data.offer,data.source);
+	    			}
+					// peerConnections[data.id].setRemoteDescription(new RTCSessionDescription(data.offer));
+	    			break;
+	    	}
+	    })
+	})
 
-    		case 'remote:offer':
-    			console.log('get remote '+ data.source +' offer!')
-    			if (!peerConnections[data.id] || (peerConnections[data.id] && !peerConnections[data.id][data.source])) {
-    				self.responseBroadcast(data.id,data.offer,data.source);
-    			}
-				// peerConnections[data.id].setRemoteDescription(new RTCSessionDescription(data.offer));
-    			break;
-    	}
-    })
+	
 
     self={
     	getScreen:getScreen,

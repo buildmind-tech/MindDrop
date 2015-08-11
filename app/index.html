@@ -41,7 +41,15 @@
 
 
     <script type="text/javascript" src="js/personal/windht.RTC.broadcast.js"></script>
+    <script type="text/javascript" src="js/personal/windht.auth.js"></script>
     <script type="text/javascript">
+    var events = require('events');
+    window.eventEmitter = new events.EventEmitter();
+
+    global.eventEmitter=window.eventEmitter;
+
+
+
 	  window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
     gui.Screen.Init();
@@ -50,7 +58,7 @@
     gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
     gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/about.html", "", "", true)
 		gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/crop.html", "", "", true)
-		var hackModules=['windht.RTC.broadcast','window.drag','window.contextmenu','window.drop','minddrop.core','window.ui','window.db'];
+		var hackModules=['windht.RTC.broadcast','window.drag','window.contextmenu','window.drop','minddrop.core','window.ui','window.db','windht.auth'];
 		var coreModules=['ngMaterial'];
 		var thirdPartyModules=['ngFileUpload','angular-progress-arc','btford.socket-io'];
 		var concatModules=hackModules.concat(thirdPartyModules,coreModules);
@@ -69,18 +77,57 @@
         $scope.complete=0;
       })
     })
-    .factory('socket',function(socketFactory){
-      return socketFactory({
-        // ioSocket:io.connect('http://106.185.45.236:8888')
-        ioSocket:io.connect('http://drop.buildmind.org')
-      })
-    })
-    .run(function(socket){
+    .factory('socket',function(socketFactory,$q,$rootScope,$timeout){
+      var socket = $q.defer();
+        
+        // listen for the authenticated event emitted on the rootScope of 
+        // the Angular app. Once the event is fired, create the socket and resolve
+        // the promise.
+        var newSocket;
 
-      socket.on('connect',function(){
-        socket.id=io.managers[Object.keys(io.managers)[0]].engine.id;
-        window.socket_id=socket.id;
+        var init=function(){
+          if (!newSocket) {
+            $timeout(function() {
+                // create the socket
+                newSocket = socketFactory({
+                    ioSocket: io.connect('http://drop.buildmind.org')
+                })
+
+                socket.resolve(newSocket);            
+            },1000); 
+          }
+          else {
+            newSocket.connect();
+          }
+        }
+
+        $rootScope.$on('authenticated',function(){
+          init();
+        });
+
+        // eventEmitter.on('login:success',function(){
+        //     init();
+        // });
+        
+        // return the promise
+        return socket.promise;
+    })
+    .run(function(socket,$auth,$rootScope){
+      $auth.auth();
+
+      socket.then(function(socket){
+        socket.on('connect',function(){
+          console.log('socket connected')
+          socket.id=io.managers[Object.keys(io.managers)[0]].engine.id;
+          window.socket_id=socket.id;
+        })
+
+        socket.on('disconnect',function(){
+          console.log('socket disconnected')
+        })
       })
+
+      
     })
 	</script>
   </body>
