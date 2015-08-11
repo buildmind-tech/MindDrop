@@ -67,12 +67,14 @@ angular.module('window.contextmenu',[])
 		var refreshPageItem = new gui.MenuItem({
 		  type: "normal", 
 		  label: "刷新",
+		  icon:"app/icon/context-menu/refresh.png"
 		});
 
 		var exitAppItem = new gui.MenuItem({
 		  type: "normal", 
 		  label: "退出MindDrop",
-		  key:"x"
+		  key:"x",
+		  icon:"app/icon/context-menu/quit.png"
 		});
 
 		var goToMindDropItem = new gui.MenuItem({
@@ -135,6 +137,7 @@ angular.module('window.contextmenu',[])
 			var logoutItem = new gui.MenuItem({
 			  type: "normal", 
 			  label: "註銷",
+			  icon:"app/icon/context-menu/quit.png"
 			});
 
 			logoutItem.click = function(){
@@ -170,7 +173,7 @@ angular.module('window.contextmenu',[])
 			contextMenu.append(showLoginPageItem);  // 0
 		}
 
-		
+		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // 3
 
 		contextMenu.append(refreshPageItem);   // 1
 
@@ -322,7 +325,8 @@ angular.module('window.contextmenu',[])
 		if (!window.sharingScreen) {
 			var startScreenSharing = new gui.MenuItem({
 			  type: "normal", 
-			  label: "開始分享屏幕"
+			  label: "開始分享屏幕",
+			  icon:"app/icon/context-menu/screenshare.png"
 			});
 
 			startScreenSharing.click=function(){
@@ -337,7 +341,8 @@ angular.module('window.contextmenu',[])
 		else if (window.sharingScreen==true) {
 			var selectScreenSharing = new gui.MenuItem({
 			  type: "normal", 
-			  label: "屏幕分享中"
+			  label: "屏幕分享中",
+			  icon:"app/icon/context-menu/screenshare.png"
 			});
 
 

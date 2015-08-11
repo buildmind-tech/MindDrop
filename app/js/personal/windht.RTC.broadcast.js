@@ -171,12 +171,15 @@ angular.module('windht.RTC.broadcast',[])
 		peerConnections[id][source].onicecandidate=function(evt){
 			if (evt.candidate) {
 				// console.log('localPeerConnection candidate generated!');
-				socket.emit('broadcast',{
-					type:"remote:candidate",
-					source:source,
-					candidate:evt.candidate,
-					id:id,
-				});
+				socket.then(function(socket){
+					socket.emit('broadcast',{
+						type:"remote:candidate",
+						source:source,
+						candidate:evt.candidate,
+						id:id,
+					});
+				})
+				
 			}
 		}
 
@@ -194,12 +197,14 @@ angular.module('windht.RTC.broadcast',[])
     		peerConnections[id][source].createAnswer(function(answer){
 	    		console.log('set screen '+ source +' offer');
 	    		peerConnections[id][source].setLocalDescription(new RTCSessionDescription(answer));
-	    		socket.emit('broadcast',{
-	    			type:'remote:offer',
-	    			offer:answer,
-	    			source:source,
-	    			// config:config,
-	    			id:id,
+	    		socket.then(function(socket){
+	    			socket.emit('broadcast',{
+		    			type:'remote:offer',
+		    			offer:answer,
+		    			source:source,
+		    			// config:config,
+		    			id:id,
+		    		})
 	    		})
 	    	});
     	});
