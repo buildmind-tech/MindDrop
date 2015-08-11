@@ -47,13 +47,22 @@ angular.module('windht.RTC.broadcast',[])
 			return;
 		}
 
+		var streamId;
+
+		if (process.platform=='darwin') {
+        	streamId='screen:'+gui.Screen.screens[0].id;
+      	}
+      	else {
+        	streamId='screen:0';
+      	}
+
 
 		navigator.getUserMedia({
 			audio: false, 
 			video: {
 				mandatory: {
 			        chromeMediaSource: 'desktop', 
-			        chromeMediaSourceId: 'screen:'+gui.Screen.screens[0].id, 
+			        chromeMediaSourceId: streamId, 
 			        maxWidth: 1920, 
 			        maxHeight: 1080
 			    }, 

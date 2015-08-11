@@ -43,6 +43,7 @@ angular.module('window.contextmenu',[])
 		var uploadFileItem = new gui.MenuItem({
 		  type: "normal", 
 		  label: "上傳文件",
+		  icon:"app/icon/context-menu/new.png"
 		});
 
 		uploadFileItem.click=function(){
@@ -52,6 +53,7 @@ angular.module('window.contextmenu',[])
 		var uploadFolderItem = new gui.MenuItem({
 		  type: "normal", 
 		  label: "上傳文件夾",
+		  icon:"app/icon/context-menu/zip.png"
 		});
 
 		uploadFolderItem.click=function(){
@@ -61,6 +63,7 @@ angular.module('window.contextmenu',[])
 		var showMainPageItem = new gui.MenuItem({
 		  type: "normal", 
 		  label: "顯示主頁面",
+		  icon:"app/icon/context-menu/account.png"
 		});
 
 		var refreshPageItem = new gui.MenuItem({
@@ -76,7 +79,8 @@ angular.module('window.contextmenu',[])
 
 		var goToMindDropItem = new gui.MenuItem({
 		  type: "normal", 
-		  label: "前往MindDrop"
+		  label: "前往MindDrop",
+		  icon:"app/icon/context-menu/goto.png"
 		});
 
 
@@ -149,9 +153,23 @@ angular.module('window.contextmenu',[])
 		}
 		else {
 			recentItems.forEach(function(item){
+
+				var item_icon;
+
+				if (item.mime.indexOf('image')!=-1){
+					item_icon="app/icon/context-menu/pure-text.png"
+				}
+				else if (item.mime.indexOf('octet-stream')!=-1){
+					item_icon="app/icon/context-menu/zip.png"
+				}
+				else {
+					item_icon="app/icon/context-menu/image.png"
+				}
+
 				var menuitem=new gui.MenuItem({
 				  type: "normal", 
 				  label: item.name,
+				  icon:item_icon,
 				});
 
 				var submenu = new gui.Menu();
@@ -159,6 +177,7 @@ angular.module('window.contextmenu',[])
 				var copyItem = new gui.MenuItem({
 				  type: "normal", 
 				  label: "拷貝到剪貼板",
+				  icon:"app/icon/context-menu/copy.png"
 				});
 
 				copyItem.click=function(){
@@ -168,6 +187,7 @@ angular.module('window.contextmenu',[])
 				var openInFolderItem = new gui.MenuItem({
 				  type: "normal", 
 				  label: "在文件夾中打開",
+				  icon:"app/icon/context-menu/zip.png"
 				});
 
 				openInFolderItem.click=function(){
@@ -177,6 +197,7 @@ angular.module('window.contextmenu',[])
 				var openInBrowserItem = new gui.MenuItem({
 				  type: "normal", 
 				  label: "在瀏覽器中打開",
+				  icon:"app/icon/context-menu/open-in-browser.png"
 				});
 
 				openInBrowserItem.click=function(){
@@ -188,7 +209,12 @@ angular.module('window.contextmenu',[])
 				var deleteItem = new gui.MenuItem({
 				  type: "normal", 
 				  label: "刪除此記錄",
+				  icon:"app/icon/context-menu/delete.png"
 				});
+
+				deleteItem.click=function(){
+					($db.getRecentFileDb().remove({uuid:item.uuid}))
+				}
 
 				submenu.append(copyItem);
 				submenu.append(openInFolderItem);
@@ -232,7 +258,8 @@ angular.module('window.contextmenu',[])
 
 		var goToScreenCrop = new gui.MenuItem({
 		  type: "normal", 
-		  label: "截取屏幕"
+		  label: "截取屏幕",
+		  icon:"app/icon/context-menu/screenshot.png"
 		});
 
 		goToScreenCrop.click=function(){
@@ -281,6 +308,7 @@ angular.module('window.contextmenu',[])
 			var copyLinkItem = new gui.MenuItem({
 			  type: "normal", 
 			  label: "拷貝觀看鏈接",
+			  icon:"app/icon/context-menu/copy.png"
 			});
 
 			copyLinkItem.click=function(){
@@ -290,6 +318,7 @@ angular.module('window.contextmenu',[])
 			var copyCodeItem = new gui.MenuItem({
 			  type: "normal", 
 			  label: "拷貝觀看代碼",
+			  icon:"app/icon/context-menu/copy.png"
 			});
 
 			copyCodeItem.click=function(){
