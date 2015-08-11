@@ -12,7 +12,7 @@ angular.module('windht.RTC.broadcast',[])
 	window.navigator.getUserMedia = window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia;
 
 	// For broadcast
-	var localCamera,localScreen;
+	var localCamera,localScreen,localAudio;
 	// For viewer
 	var remoteStream;
 
@@ -47,15 +47,19 @@ angular.module('windht.RTC.broadcast',[])
 			return;
 		}
 
-		navigator.getUserMedia({audio: false, video: {
-			mandatory: {
-		        chromeMediaSource: 'desktop', 
-		        chromeMediaSourceId: 'screen:0', 
-		        maxWidth: 1920, 
-		        maxHeight: 1080
-		    }, 
-		    optional:[]
-		}}, function (stream) {
+
+		navigator.getUserMedia({
+			audio: false, 
+			video: {
+				mandatory: {
+			        chromeMediaSource: 'desktop', 
+			        chromeMediaSourceId: 'screen:'+gui.Screen.screens[0].id, 
+			        maxWidth: 1920, 
+			        maxHeight: 1080
+			    }, 
+			    optional:[]
+			}
+		}, function (stream) {
 	    	localScreen=stream;
 	    	d.resolve(stream);
 	    }, function (error) {
@@ -87,6 +91,28 @@ angular.module('windht.RTC.broadcast',[])
 		return d.promise;
 	}
 
+	var getAudio=function(){
+		var d = $q.defer();
+
+		if (localAudio) {
+			d.resolve(localAudio);
+			return;
+		}
+
+		navigator.getUserMedia({
+		    video: false,
+		    audio: true
+		}, function (stream) {
+		    localAudio = stream;
+		    // $rootScope.$broadcast('rtc:local:video:ready',stream);		    
+		    d.resolve(localAudio);
+		}, function (error) {
+		    d.reject(error);
+		});
+		  
+		return d.promise;
+	}
+
 
 	var requestBroadcast=function(id){
 		peerConnections[id] = new RTCPeerConnection(iceConfig);
@@ -102,6 +128,7 @@ angular.module('windht.RTC.broadcast',[])
 				});
 			}
 		}
+
 		peerConnections[id].onaddstream=function(evt){
 			console.log('get remote stream');
 		}
@@ -114,66 +141,60 @@ angular.module('windht.RTC.broadcast',[])
 		        	id:id,
 		        })
 		    }, function(err){console.log(err)});
-		}, function(err){console.log(err)}, 
-		{
-			offerToReceiveAudio: true,
-			offerToReceiveVideo: true
-		});
+		}, function(err){console.log(err)});
 	}
 
-	var responseBroadcast=function(id,remoteOffer){
-		peerConnections[id] = new RTCPeerConnection(iceConfig);
+	var responseBroadcast=function(id,remoteOffer,source){
 
-		peerConnections[id].oniceconnectionstatechange = function(ev) { 
-			console.log(ev);
-		    if(peerConnections[id].iceConnectionState == 'disconnected') {
-		    	console.log('some one disconnected!')
-		        peerConnections[id].close();
-		        delete peerConnections[id];
+		if (!peerConnections[id]) {
+			peerConnections[id]={};
+		}
+
+		peerConnections[id][source] = new RTCPeerConnection(iceConfig);
+
+		peerConnections[id][source].oniceconnectionstatechange = function(ev) { 
+		    if(ev.currentTarget.iceConnectionState == 'disconnected') {
+		        peerConnections[id][source].close();
+		        delete peerConnections[id][source];
 		    }
 		};
 
-		peerConnections[id].onicecandidate=function(evt){
-			// console.log(evt);
+		peerConnections[id][source].onicecandidate=function(evt){
 			if (evt.candidate) {
-				console.log('localPeerConnection candidate generated!');
+				// console.log('localPeerConnection candidate generated!');
 				socket.emit('broadcast',{
 					type:"remote:candidate",
+					source:source,
 					candidate:evt.candidate,
-					// config:config,
 					id:id,
 				});
 			}
 		}
-		peerConnections[id].onaddstream=function(evt){
-			console.log('get remote stream');
-			// document.getElementById('localVideo').src=URL.createObjectURL(evt.stream);
 
-			// document.getElementById('localVideo').src=URL.createObjectURL(evt.stream);
+		switch (source) {
+			case 'camera':
+				peerConnections[id].camera.addStream(localCamera);
+				break;
+			case 'screen':
+				peerConnections[id].screen.addStream(localScreen);
+				break;
 		}
 
-		// window.localScreen=localScreen;
-		// peerConnections[id].addStream(localScreen);
 
-		peerConnections[id].addStream(localScreen);
-
-		peerConnections[id].setRemoteDescription(new RTCSessionDescription(remoteOffer),function(){
-    		peerConnections[id].createAnswer(function(answer){
-	    		console.log('set local offer');
-	    		peerConnections[id].setLocalDescription(new RTCSessionDescription(answer));
+		peerConnections[id][source].setRemoteDescription(new RTCSessionDescription(remoteOffer),function(){
+    		peerConnections[id][source].createAnswer(function(answer){
+	    		console.log('set screen '+ source +' offer');
+	    		peerConnections[id][source].setLocalDescription(new RTCSessionDescription(answer));
 	    		socket.emit('broadcast',{
 	    			type:'remote:offer',
 	    			offer:answer,
+	    			source:source,
 	    			// config:config,
 	    			id:id,
 	    		})
 	    	});
     	});
-
-
-    	// document.getElementById('localScreen').src=URL.createObjectURL(localScreen);
-    	
-    	
+    	// document.getElementById('localScreen').src=URL.createObjectURL(localScreen);  	
 	}
 
     var start=function(){
@@ -182,6 +203,9 @@ angular.module('windht.RTC.broadcast',[])
 
     	self.getScreen().then(function(screen){
     		console.log(screen);
+    		self.getStream().then(function(audio){
+    			console.log(audio);
+    		})
     	})
 
     	return q.promise;
@@ -190,7 +214,14 @@ angular.module('windht.RTC.broadcast',[])
     var stop=function(){
     	window.sharingScreen=false;
 		for (var i in peerConnections) {
-			peerConnections[i].close();
+			if (peerConnections[i].screen) {
+				peerConnections[i].screen.close();
+				delete peerConnections[i].screen;
+			}
+			if (peerConnections[i].camera) {
+				peerConnections[i].camera.close();
+				delete peerConnections[i].camera;
+			}
 			delete peerConnections[i];
 		}
 
@@ -222,16 +253,16 @@ angular.module('windht.RTC.broadcast',[])
     		// 	}
     		// 	break;
     		case 'remote:candidate':
-    			console.log('get remote candidate!')
-    			if (peerConnections[data.id]) {
-    				peerConnections[data.id].addIceCandidate(new RTCIceCandidate(data.candidate));
+    			console.log('get remote ' + data.source +' candidate!')
+    			if (peerConnections[data.id] && peerConnections[data.id][data.source]) {
+    				peerConnections[data.id][data.source].addIceCandidate(new RTCIceCandidate(data.candidate));
     			}
     			break;
 
     		case 'remote:offer':
-    			console.log('get remote offer!')
-    			if (!peerConnections[data.id]) {
-    				self.responseBroadcast(data.id,data.offer);
+    			console.log('get remote '+ data.source +' offer!')
+    			if (!peerConnections[data.id] || (peerConnections[data.id] && !peerConnections[data.id][data.source])) {
+    				self.responseBroadcast(data.id,data.offer,data.source);
     			}
 				// peerConnections[data.id].setRemoteDescription(new RTCSessionDescription(data.offer));
     			break;
@@ -241,6 +272,7 @@ angular.module('windht.RTC.broadcast',[])
     self={
     	getScreen:getScreen,
 		getStream: getStream,
+		getAudio:getAudio,
 
 		requestBroadcast:requestBroadcast,
 		responseBroadcast:responseBroadcast,

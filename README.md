@@ -3,6 +3,21 @@ A Drop-And-Share Desktop App built on top of [node-webkit](https://github.com/nw
 
 ![alt text](http://drop.buildmind.org/images/favicon.png "Mind-Drop")
 
+# Features
+
+## Drag-n-drop, then share your links.
+
+All files drag in MindDrop are uploaded to MindDrop server, with the share link everyone can access the file.
+
+## Convenient screen crop
+
+You can directly crop a part of screen and share the image.
+
+## Screen Sharing (also add camera support)
+
+You can start screen sharing anytime you like and people who uses chrome or firefox can directly watch it in their browsers through the links.
+
+
 # Build!
 Clone to local and run 
 

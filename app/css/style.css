@@ -7,15 +7,15 @@ html,body {
 }
 
 html {
-	width: 100px;
-  	height: 100px;
+	width: 60px;
+  	height: 60px;
   	position: absolute;
 }
 
 body {
 	-webkit-user-select: none;
-	width: 100px;
-  	height: 100px;
+	width: 60px;
+  	height: 60px;
   	margin: 0;
 }
 
