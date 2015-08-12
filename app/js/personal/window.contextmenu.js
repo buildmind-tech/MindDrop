@@ -131,7 +131,7 @@ angular.module('window.contextmenu',[])
 			  label: "請登錄",
 			  icon:"app/icon/context-menu/account.png"
 			});
-			
+
 			showLoginPageItem.click=function(){
 				loginWindow = gui.Window.open('auth/index.html', {
 				  position: 'center',
@@ -174,13 +174,16 @@ angular.module('window.contextmenu',[])
 				var item_icon;
 
 				if (item.mime.indexOf('image')!=-1){
-					item_icon="app/icon/context-menu/pure-text.png"
+					item_icon="app/icon/context-menu/image.png"
 				}
 				else if (item.mime.indexOf('octet-stream')!=-1){
 					item_icon="app/icon/context-menu/zip.png"
 				}
+				else if (item.mime.indexOf('text')!=-1){
+					item_icon="app/icon/context-menu/pure-text.png"
+				}
 				else {
-					item_icon="app/icon/context-menu/image.png"
+
 				}
 
 				var menuitem=new gui.MenuItem({

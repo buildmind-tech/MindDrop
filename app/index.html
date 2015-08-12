@@ -116,7 +116,7 @@
       socket.on('connect',function(){
         console.log('socket connected')
         // socket.id=io.managers[Object.keys(io.managers)[0]].engine.id;
-        // window.socket_id=socket.id;
+        window.socket_id=socket.id;
       })
 
       socket.on('disconnect',function(){
