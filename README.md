@@ -5,6 +5,8 @@ A Drop-And-Share Desktop App built on top of [node-webkit](https://github.com/nw
 
 # Features
 
+![alt text](http://drop.buildmind.org/images/sample.png "Mind-Drop")
+
 ## Drag-n-drop, then share your links.
 
 All files drag in MindDrop are uploaded to MindDrop server, with the share link everyone can access the file.
