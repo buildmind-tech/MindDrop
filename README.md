@@ -55,6 +55,12 @@ Please refer to [Development](https://github.com/buildmind-tech/MindDrop/wiki/De
 
 # Releases
 
+## 2015/08/12 -  v0.2.0
+
+This is a beta [release](https://github.com/buildmind-tech/MindDrop/releases/tag/v0.2.0-beta), the front-end is currently working great with the backend.
+
+Mac versions are not provided, feel free to download the raw package and directly run with nw instead of clone and build yourself.
+
 ## 2015/08/06 -  v0.1.0
 
 This product is in alpha phase, an alpha [release](https://github.com/buildmind-tech/MindDrop/releases/tag/v0.1.0-alpha).
