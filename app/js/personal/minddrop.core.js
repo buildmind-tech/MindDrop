@@ -25,7 +25,7 @@ angular.module('minddrop.core',[])
 			console.log(files);
 
 		if (files[0].size > 20*1024*1024) {
-			alert('The file is too big! Currently alpha release only support 20MB single file.')
+			alert('The file is too big! Currently alpha release only support 200MB single file.')
 		}
 		else if (isDirectory) {
 			var timestamp=$filter('date')(new Date(), 'yyyy-MM-dd-HH-mm-ss');
@@ -53,6 +53,7 @@ angular.module('minddrop.core',[])
 				Upload.upload({
 		          url: "http://drop.buildmind.org/upload",
 		          file: uploadFiles,
+		          data:{username:window.localStorage['username'],userid:window.localStorage['userid'],usersession:window.localStorage['usersession']}
 		        }).progress(function(evt) {
 		          // console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file[0].name);
 		          $rootScope.$broadcast('upload:progress:update',{
@@ -85,6 +86,7 @@ angular.module('minddrop.core',[])
 			Upload.upload({
 	          url: "http://drop.buildmind.org/upload",
 	          file: uploadFiles,
+		      data:{username:window.localStorage['username'],userid:window.localStorage['userid'],usersession:window.localStorage['usersession']}
 	        }).progress(function(evt) {
 	          // console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file[0].name);
 	          $rootScope.$broadcast('upload:progress:update',{

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "lowdb": "^0.10.2",
-    "archiver":"*"
+    "archiver":"*",
+    "socket.io-client":"*"
   }
 }

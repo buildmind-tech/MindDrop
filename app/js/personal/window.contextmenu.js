@@ -12,7 +12,7 @@ angular.module('window.contextmenu',[])
 	})
 })	
 
-.factory('$contextMenu',function($db,$MindDrop,$auth,socket){
+.factory('$contextMenu',function($db,$MindDrop,$auth,socket,$rootScope){
 	var self=this;
 	var clipboard = gui.Clipboard.get();
 	var preferences = $db.getPreferences();
@@ -20,8 +20,7 @@ angular.module('window.contextmenu',[])
 
 	var contextMenu;
 
-	
-	
+	var loginWindow;
 
 	var constructRecentItems=function(){
 		var db=$db.getRecentFileDb();
@@ -39,8 +38,9 @@ angular.module('window.contextmenu',[])
 			self.clean(contextMenu);
 		}
 		
-
 		contextMenu = new gui.Menu();
+
+		// upload file
 
 		var uploadFileItem = new gui.MenuItem({
 		  type: "normal", 
@@ -52,6 +52,12 @@ angular.module('window.contextmenu',[])
 			document.getElementById('fileDialog').click();
 		}
 
+		uploadFileItem.enabled= window.localStorage['loggedin']!='true' ? false : true
+
+		contextMenu.append(uploadFileItem); 
+
+		// upload folder
+
 		var uploadFolderItem = new gui.MenuItem({
 		  type: "normal", 
 		  label: "上傳文件夾",
@@ -62,20 +68,11 @@ angular.module('window.contextmenu',[])
 			document.getElementById('folderDialog').click();
 		}
 
-		
+		uploadFolderItem.enabled= window.localStorage['loggedin']!='true' ? false : true
 
-		var refreshPageItem = new gui.MenuItem({
-		  type: "normal", 
-		  label: "刷新",
-		  icon:"app/icon/context-menu/refresh.png"
-		});
+		contextMenu.append(uploadFolderItem); 
 
-		var exitAppItem = new gui.MenuItem({
-		  type: "normal", 
-		  label: "退出MindDrop",
-		  key:"x",
-		  icon:"app/icon/context-menu/quit.png"
-		});
+		// go to mind-drop
 
 		var goToMindDropItem = new gui.MenuItem({
 		  type: "normal", 
@@ -83,44 +80,23 @@ angular.module('window.contextmenu',[])
 		  icon:"app/icon/context-menu/goto.png"
 		});
 
-
 		goToMindDropItem.click=function(){
 			gui.Shell.openExternal('http://drop.buildmind.org');
 		}
 
 		
-		var aboutItem = new gui.MenuItem({
-		  	type: "normal", 
-		  	label: "關於"
+
+
+		var refreshPageItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "刷新",
+		  icon:"app/icon/context-menu/refresh.png"
 		});
-
-		aboutItem.click=function(){
-			gui.Window.open('about.html', {
-			  position: 'center',
-			  width: 450,
-			  height: 350,
-			  focus:true,
-			  frame: false,
-			  toolbar:false,
-			  resizable:false,
-			  transparent:true,
-			  icon:"app/icon/icon.png",
-			});
-		}
-
-
-
 
 		refreshPageItem.click=function(){
 			location.reload();
 		}
-
-		exitAppItem.click=function(){
-			gui.App.quit();
-		}
-
-		contextMenu.append(uploadFileItem); 
-		contextMenu.append(uploadFolderItem); 
+	
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' }));
 
@@ -142,24 +118,22 @@ angular.module('window.contextmenu',[])
 
 			logoutItem.click = function(){
 				$auth.logout().then(function(){
-					socket.then(function(socket){
-						socket.disconnect();
-					})
+					socket.disconnect();
 				});
 			}
-
 			contextMenu.append(accountItem);
 			contextMenu.append(logoutItem);
 		}
 		else {
+			
 			var showLoginPageItem = new gui.MenuItem({
 			  type: "normal", 
 			  label: "請登錄",
 			  icon:"app/icon/context-menu/account.png"
 			});
-
+			
 			showLoginPageItem.click=function(){
-				gui.Window.open('auth/index.html', {
+				loginWindow = gui.Window.open('auth/index.html', {
 				  position: 'center',
 				  width: 300,
 				  height: 500,
@@ -168,6 +142,8 @@ angular.module('window.contextmenu',[])
 				  toolbar:false,
 				  resizable:false,
 				});
+
+				// socket.connect();
 			}
 
 			contextMenu.append(showLoginPageItem);  // 0
@@ -318,6 +294,8 @@ angular.module('window.contextmenu',[])
 			});
 		}
 
+		goToScreenCrop.enabled= window.localStorage['loggedin']!='true' ? false : true
+
 		contextMenu.append(goToScreenCrop); // -1
 
 		
@@ -334,7 +312,7 @@ angular.module('window.contextmenu',[])
 				clipboard.set('http://drop.buildmind.org/share-screen/'+window.socket_id, 'text');
 			}
 
-
+			startScreenSharing.enabled= window.localStorage['loggedin']!='true' ? false : true
 
 			contextMenu.append(startScreenSharing);
 		}
@@ -434,9 +412,47 @@ angular.module('window.contextmenu',[])
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -4
 		contextMenu.append(goToMindDropItem); // -3
-		contextMenu.append(aboutItem); // -3
+
+
+
+		// about us
+
+		var aboutItem = new gui.MenuItem({
+		  	type: "normal", 
+		  	label: "關於"
+		});
+
+		aboutItem.click=function(){
+			gui.Window.open('about.html', {
+			  position: 'center',
+			  width: 450,
+			  height: 350,
+			  focus:true,
+			  frame: false,
+			  toolbar:false,
+			  resizable:false,
+			  transparent:true,
+			  icon:"app/icon/icon.png",
+			});
+		}
+
+		contextMenu.append(aboutItem);
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -2
+
+		// exit
+
+		var exitAppItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "退出MindDrop",
+		  key:"x",
+		  icon:"app/icon/context-menu/quit.png"
+		});
+
+		exitAppItem.click=function(){
+			gui.App.quit();
+		}
+
 		contextMenu.append(exitAppItem); // -1
 
 		// Set tray

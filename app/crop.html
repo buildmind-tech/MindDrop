@@ -156,6 +156,7 @@
           if (e.which==13) {
             var base=$('#photo-container > #photo').cropper('getCroppedCanvas').toDataURL("image/png").replace(/^data:image\/png;base64,/, "")
             require("fs").writeFile("temp/screenshot.png", base, 'base64', function(err) {
+              window.opener.onimagecropped();
               win.close()
               console.log(err);
             });

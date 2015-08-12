@@ -91,8 +91,8 @@
 
         $auth.login($scope.user).then(function(data){
           console.log(data);
-          eventEmitter.emit('login:success');
-          win.close()
+          window.opener.onlogin()
+          win.close();
         });
       }
     })

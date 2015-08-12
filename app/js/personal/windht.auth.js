@@ -47,6 +47,7 @@ angular.module('windht.auth', [])
 	        }).error(function(err){
 	          	// window.localStorage['username']='';
 	          	// window.localStorage['userid']='';
+	          	window.localStorage['loggedin']='false';
 	          	window.localStorage['usersession']='';
 	          	q.reject(err);
 	        })

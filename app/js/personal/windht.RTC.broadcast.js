@@ -171,15 +171,12 @@ angular.module('windht.RTC.broadcast',[])
 		peerConnections[id][source].onicecandidate=function(evt){
 			if (evt.candidate) {
 				// console.log('localPeerConnection candidate generated!');
-				socket.then(function(socket){
-					socket.emit('broadcast',{
-						type:"remote:candidate",
-						source:source,
-						candidate:evt.candidate,
-						id:id,
-					});
-				})
-				
+				socket.emit('broadcast',{
+					type:"remote:candidate",
+					source:source,
+					candidate:evt.candidate,
+					id:id,
+				});
 			}
 		}
 
@@ -197,14 +194,12 @@ angular.module('windht.RTC.broadcast',[])
     		peerConnections[id][source].createAnswer(function(answer){
 	    		console.log('set screen '+ source +' offer');
 	    		peerConnections[id][source].setLocalDescription(new RTCSessionDescription(answer));
-	    		socket.then(function(socket){
-	    			socket.emit('broadcast',{
-		    			type:'remote:offer',
-		    			offer:answer,
-		    			source:source,
-		    			// config:config,
-		    			id:id,
-		    		})
+	    		socket.emit('broadcast',{
+	    			type:'remote:offer',
+	    			offer:answer,
+	    			source:source,
+	    			// config:config,
+	    			id:id,
 	    		})
 	    	});
     	});
@@ -250,9 +245,9 @@ angular.module('windht.RTC.broadcast',[])
 		}
 	}
 
-	socket.then(function(socket){
 		socket.on('broadcast',function(data){
-    		switch (data.type) {
+    	switch (data.type) {
+
 	    		// case 'broadcast:request':
 	    		// 	if (localCamera || localScreen) {
 	    		// 		// socket.emit('rtc',{
@@ -282,8 +277,6 @@ angular.module('windht.RTC.broadcast',[])
 	    			break;
 	    	}
 	    })
-	})
-
 	
 
     self={
