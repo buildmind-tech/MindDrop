@@ -428,8 +428,8 @@ angular.module('window.contextmenu',[])
 		aboutItem.click=function(){
 			gui.Window.open('about.html', {
 			  position: 'center',
-			  width: 450,
-			  height: 350,
+			  width: 350,
+			  height: 400,
 			  focus:true,
 			  frame: false,
 			  toolbar:false,

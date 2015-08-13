@@ -9,6 +9,16 @@ html,body {
 	overflow: hidden;
 }
 
+body {
+	padding-top: 40px;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: 0 -20px;
+	background-image: url(../img/drop.jpg);
+	color:white;
+	margin: 0;
+}
+
 .frame-top {
 	position: absolute;
 	top: 0;
@@ -57,4 +67,38 @@ html,body {
 	padding: 12px 50px;
 	margin: 0;
 	color: black;
+}
+
+.logo img{
+	width: 150px;
+	height: 150px;
+	display: block;
+	margin: 0 auto;
+	background:transparent;
+	border-radius: 100px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+
+
+}
+
+.title{
+text-align: center;
+
+}
+
+.title h3{
+	font-family: verdana;
+
+
+}
+
+.title p{
+	font-size: 14px;
+}
+
+.copyright{
+	text-align: center;
+	font-size: 14px;
+
 }
