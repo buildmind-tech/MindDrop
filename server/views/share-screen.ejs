@@ -1,0 +1,219 @@
+<html ng-app="shareScreen">
+
+<head>
+	<title>Screen Sharing</title>
+	<link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+
+    <link href="//cdn.bootcss.com/angular-material/0.10.1-rc5/angular-material.min.css" rel="stylesheet">
+    <style type="text/css">
+
+    	[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+		  display: none !important;
+		}
+    	.center-file {
+    		width: 80%;
+    		height: 80%;
+    		left: 50%;
+    		top: 50%;
+    		position: absolute;
+
+    		text-align: center;
+
+    		-webkit-transform:translate(-50%,-50%);
+    		-ms-transform:translate(-50%,-50%);
+    		-moz-transform:translate(-50%,-50%);
+    		transform:translate(-50%,-50%);
+    	}
+
+    	video#screen {
+    		max-width: 100%;
+  			max-height: 100%;
+    	}
+
+    	video#camera {
+    		position: absolute;
+    		width: 250px;
+    		right: 0;
+  			bottom: 0;
+    	}
+
+    </style>
+
+    <script type="text/javascript">
+
+    </script>
+ 
+</head>
+
+
+
+<body ng-cloak>
+	<div class="center-file">
+		<video id="screen" autoplay></video>
+		<video id="camera" autoplay></video>
+	</div>
+
+	
+
+	<script src="/javascripts/angular.min.js"></script>
+	<script src="/javascripts/angular-material.min.js"></script>
+	<script src="/javascripts/angular-aria.min.js"></script>
+	<script src="/javascripts/angular-animate.min.js"></script>
+
+	<script src="/javascripts/socket/socket.io-1.3.5.js"></script>
+	<script src="/javascripts/socket/socket.min.js"></script>
+	
+	<script type="text/javascript">
+		angular.module('shareScreen',['ngMaterial','btford.socket-io'])
+
+		.factory('$broadcast',function(socket){
+			var self=this;
+
+
+			window.RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+			window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate;
+			window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
+			window.URL = window.URL || window.mozURL || window.webkitURL;
+			window.navigator.getUserMedia = window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia;
+
+			var remoteStream;
+			var iceConfig = { 'iceServers': [
+				{
+					url:"turn:52.68.40.147:3478",
+					username:"9dtech",
+					credential:"9dtech",
+				}
+				// {
+				// 	url:'stun:stun.l.google.com:19302'
+				// },
+			]};
+			
+			window.peerConnection={};
+
+
+			var watch=function(id){
+				peerConnection.camera = new RTCPeerConnection(iceConfig);
+				peerConnection.screen = new RTCPeerConnection(iceConfig);
+
+				peerConnection.camera.onicecandidate=function(evt){
+					if (evt.candidate) {
+						console.log('localPeerConnection candidate generated!');
+						socket.emit('broadcast',{
+							type:"remote:candidate",
+							candidate:evt.candidate,
+							source:"camera",
+							// config:config,
+							id:id,
+						});
+					}
+				}
+
+				peerConnection.camera.onaddstream=function(evt){
+					console.log('get remote camera stream');
+					document.getElementById('camera').src=URL.createObjectURL(evt.stream);
+				}
+
+				peerConnection.camera.createOffer(function (offer) {
+					console.log('get camera local offer')
+				    peerConnection.camera.setLocalDescription(offer, function() {
+				    	console.log('set camera local offer');
+				        socket.emit('broadcast',{
+				        	type:'remote:offer',
+				        	source:"camera",
+				        	offer:offer,
+				        	id:id,
+				        })
+				    }, function(err){console.log(err)});
+				}, function(err){console.log(err)}, 
+				{
+					mandatory: {
+				        OfferToReceiveAudio: true,
+				        OfferToReceiveVideo: true
+				    }
+				});
+
+				peerConnection.screen.onicecandidate=function(evt){
+					if (evt.candidate) {
+						console.log('localPeerConnection candidate generated!');
+						socket.emit('broadcast',{
+							type:"remote:candidate",
+							candidate:evt.candidate,
+							source:"screen",
+							// config:config,
+							id:id,
+						});
+					}
+				}
+				peerConnection.screen.onaddstream=function(evt){
+					console.log('get remote screen stream');
+					document.getElementById('screen').src=URL.createObjectURL(evt.stream);
+				}
+
+				peerConnection.screen.createOffer(function (offer) {
+					console.log('get screen local offer')
+				    peerConnection.screen.setLocalDescription(offer, function() {
+				    	console.log('set screen local offer');
+				        socket.emit('broadcast',{
+				        	type:'remote:offer',
+				        	source:"screen",
+				        	offer:offer,
+				        	id:id,
+				        })
+				    }, function(err){console.log(err)});
+				}, function(err){console.log(err)}, 
+				{
+					mandatory: {
+				        OfferToReceiveAudio: true,
+				        OfferToReceiveVideo: true
+				    }
+				});
+			}
+
+			socket.on('broadcast',function(data){
+				switch(data.type){
+
+					case 'remote:candidate':
+						console.log('get remote ' + data.source + ' candidate!')
+						if (peerConnection && peerConnection[data.source]) {
+							peerConnection[data.source].addIceCandidate(new RTCIceCandidate(data.candidate));
+						}
+
+					case 'remote:offer':
+						if (peerConnection && peerConnection[data.source]) {
+							console.log('setting remote' + data.source +' description')
+							peerConnection[data.source].setRemoteDescription(new RTCSessionDescription(data.offer))
+						}
+				}
+			})
+
+			self={
+				watch:watch
+			}
+
+			return self;
+
+		})
+
+
+		.factory('socket',function(socketFactory){
+	      return socketFactory({
+	        // ioSocket:io.connect('http://106.185.45.236:8888')
+	        ioSocket:io.connect('http://drop.buildmind.org')
+	      })
+	    })
+	    .run(function(socket,$broadcast){
+
+	      socket.on('connect',function(){
+	        socket.id=io.managers[Object.keys(io.managers)[0]].engine.id;
+	        window.socket_id=socket.id;
+	      })
+
+	      $broadcast.watch('<%= id %>');
+
+	    })
+
+	</script>
+</body>
+
+<html>

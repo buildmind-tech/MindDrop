@@ -1,0 +1,67 @@
+<html ng-app="share">
+
+<head>
+	<title><%= title %></title>
+	<link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+
+    <link href="//cdn.bootcss.com/angular-material/0.10.1-rc5/angular-material.min.css" rel="stylesheet">
+    <style type="text/css">
+
+    	[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+		  display: none !important;
+		}
+    	.center-file {
+    		width: 500px;
+    		height: 400px;
+    		left: 50%;
+    		top: 50%;
+    		position: absolute;
+
+    		text-align: center;
+
+    		-webkit-transform:translate(-50%,-50%);
+    		-ms-transform:translate(-50%,-50%);
+    		-moz-transform:translate(-50%,-50%);
+    		transform:translate(-50%,-50%);
+    	}
+    </style>
+
+    <script type="text/javascript">
+
+    </script>
+ 
+</head>
+
+
+
+<body ng-cloak>
+	<div class="center-file">
+		<h4><%= name %></h4>
+		<p>File size:{{ <%= size %> | size }}</p>
+		<md-button class="md-primary md-raised" href="http://drop.buildmind.org/download/<%= uuid %>" download="<%= name %>" target="_blank">開始下載</md-button>
+	</div>
+
+	
+
+	<script src="/javascripts/angular.min.js"></script>
+	<script src="/javascripts/angular-material.min.js"></script>
+	<script src="/javascripts/angular-aria.min.js"></script>
+	<script src="/javascripts/angular-animate.min.js"></script>
+	
+	<script type="text/javascript">
+		angular.module('share',['ngMaterial'])
+		.filter('size',function(){
+			return function(input) {
+
+				if (input<1000) {return input+'Bytes'}
+				else if (input<1000000) {return (input/1000)+'KB'}
+				else {return (input/1000000)+'MB'}
+
+				
+			}
+		})
+	</script>
+</body>
+
+<html>
