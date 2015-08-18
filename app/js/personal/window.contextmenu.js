@@ -72,6 +72,33 @@ angular.module('window.contextmenu',[])
 
 		contextMenu.append(uploadFolderItem); 
 
+		contextMenu.append(new gui.MenuItem({ type: 'separator' }));
+
+		var createNoteItem = new gui.MenuItem({
+		  type: "normal", 
+		  label: "創建便條",
+		  icon:"app/icon/context-menu/pure-text.png"
+		});
+
+		createNoteItem.click=function(){
+			gui.Window.open('note.html', {
+			  position: 'center',
+			  width: 300,
+			  height: 280,
+			  // max_width:300,
+			  // max_height:280,
+			  focus:true,
+			  frame: false,
+			  toolbar:false,
+			  resizable:true,
+			  icon:"app/icon/icon.png",
+			});
+		}
+
+		contextMenu.append(createNoteItem); 
+
+		// contextMenu.append(new gui.MenuItem({ type: 'separator' }));
+
 		// go to mind-drop
 
 		var goToMindDropItem = new gui.MenuItem({
@@ -155,123 +182,142 @@ angular.module('window.contextmenu',[])
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // 3
 
-		var recentItems=self.constructRecentItems();
+		
 
-		if (!recentItems || recentItems.length==0) {
+		if (window.localStorage['loggedin']=='true') { 
 
-			var noRecentList=new gui.MenuItem({
-			  type: "normal", 
-			  label: "沒有最近的上傳文件",
-			})
+			var recentItems=self.constructRecentItems();
 
-			noRecentList.enabled=false;
+			if (!recentItems || recentItems.length==0) {
 
-			contextMenu.append(noRecentList);
-		}
-		else {
-			recentItems.forEach(function(item){
-
-				var item_icon;
-
-				if (item.mime.indexOf('image')!=-1){
-					item_icon="app/icon/context-menu/image.png"
-				}
-				else if (item.mime.indexOf('octet-stream')!=-1){
-					item_icon="app/icon/context-menu/zip.png"
-				}
-				else if (item.mime.indexOf('text')!=-1){
-					item_icon="app/icon/context-menu/pure-text.png"
-				}
-				else {
-
-				}
-
-				var menuitem=new gui.MenuItem({
+				var noRecentList=new gui.MenuItem({
 				  type: "normal", 
-				  label: item.name,
-				  icon:item_icon,
-				});
-
-				var submenu = new gui.Menu();
-
-				var copyItem = new gui.MenuItem({
-				  type: "normal", 
-				  label: "拷貝到剪貼板",
-				  icon:"app/icon/context-menu/copy.png"
-				});
-
-				copyItem.click=function(){
-					clipboard.set('http://drop.buildmind.org/share/'+item.uuid, 'text');
-				};
-
-				var openInFolderItem = new gui.MenuItem({
-				  type: "normal", 
-				  label: "在文件夾中打開",
-				  icon:"app/icon/context-menu/zip.png"
-				});
-
-				openInFolderItem.click=function(){
-					gui.Shell.showItemInFolder(item.localPath);
-				}
-
-				var openInBrowserItem = new gui.MenuItem({
-				  type: "normal", 
-				  label: "在瀏覽器中打開",
-				  icon:"app/icon/context-menu/open-in-browser.png"
-				});
-
-				openInBrowserItem.click=function(){
-					gui.Shell.openExternal('http://drop.buildmind.org/share/'+item.uuid);
-				}
-
-				
-
-				var deleteItem = new gui.MenuItem({
-				  type: "normal", 
-				  label: "刪除此記錄",
-				  icon:"app/icon/context-menu/delete.png"
-				});
-
-				deleteItem.click=function(){
-					($db.getRecentFileDb().remove({uuid:item.uuid}))
-				}
-
-				submenu.append(copyItem);
-				submenu.append(openInFolderItem);
-				submenu.append(openInBrowserItem);
-
-				submenu.append(new gui.MenuItem({ type: 'separator' }));
-
-				submenu.append(deleteItem);
-
-				menuitem.submenu=submenu;
-
-			
-				contextMenu.append(menuitem);
-			})
-
-			if ($db.getRecentFileDb().value().length>5) {
-				var moreFileItem=new gui.MenuItem({
-				  type: "normal", 
-				  label: "更多...",
-				});
-
-				moreFileItem.click=function(){
-
-				}
-
-				contextMenu.append(moreFileItem);
-
-				var leftFileItem=new gui.MenuItem({
-					type:"normal",
-					label:"還有"+ ($db.getRecentFileDb().value().length-5) +"個文件"
+				  label: "沒有最近的上傳文件",
 				})
 
-				leftFileItem.enabled=false;
+				noRecentList.enabled=false;
 
-				contextMenu.append(leftFileItem);
+				contextMenu.append(noRecentList);
 			}
+			else {
+				recentItems.forEach(function(item){
+
+					var item_icon;
+
+					if (item.mime.indexOf('image')!=-1){
+						item_icon="app/icon/context-menu/image.png"
+					}
+					else if (item.mime.indexOf('octet-stream')!=-1){
+						item_icon="app/icon/context-menu/zip.png"
+					}
+					else if (item.mime.indexOf('text')!=-1){
+						item_icon="app/icon/context-menu/pure-text.png"
+					}
+					else {
+
+					}
+
+					var menuitem=new gui.MenuItem({
+					  type: "normal", 
+					  label: item.name,
+					  icon:item_icon,
+					});
+
+					var submenu = new gui.Menu();
+
+					var copyItem = new gui.MenuItem({
+					  type: "normal", 
+					  label: "拷貝到剪貼板",
+					  icon:"app/icon/context-menu/copy.png"
+					});
+
+					copyItem.click=function(){
+						clipboard.set('http://drop.buildmind.org/share/'+item.uuid, 'text');
+					};
+
+					var openInFolderItem = new gui.MenuItem({
+					  type: "normal", 
+					  label: "在文件夾中打開",
+					  icon:"app/icon/context-menu/zip.png"
+					});
+
+					openInFolderItem.click=function(){
+						gui.Shell.showItemInFolder(item.localPath);
+					}
+
+					var openInBrowserItem = new gui.MenuItem({
+					  type: "normal", 
+					  label: "在瀏覽器中打開",
+					  icon:"app/icon/context-menu/open-in-browser.png"
+					});
+
+					openInBrowserItem.click=function(){
+						gui.Shell.openExternal('http://drop.buildmind.org/share/'+item.uuid);
+					}
+
+					
+
+					var deleteItem = new gui.MenuItem({
+					  type: "normal", 
+					  label: "刪除此記錄",
+					  icon:"app/icon/context-menu/delete.png"
+					});
+
+					deleteItem.click=function(){
+						($db.getRecentFileDb().remove({uuid:item.uuid}))
+					}
+
+					submenu.append(copyItem);
+					submenu.append(openInFolderItem);
+					submenu.append(openInBrowserItem);
+
+					submenu.append(new gui.MenuItem({ type: 'separator' }));
+
+					submenu.append(deleteItem);
+
+					menuitem.submenu=submenu;
+
+				
+					contextMenu.append(menuitem);
+				})
+
+				if ($db.getRecentFileDb().value().length>5) {
+					var moreFileItem=new gui.MenuItem({
+					  type: "normal", 
+					  label: "更多...",
+					});
+
+					moreFileItem.click=function(){
+
+					}
+
+					contextMenu.append(moreFileItem);
+
+					var leftFileItem=new gui.MenuItem({
+						type:"normal",
+						label:"還有"+ ($db.getRecentFileDb().value().length-5) +"個文件"
+					})
+
+					leftFileItem.enabled=false;
+
+					contextMenu.append(leftFileItem);
+				}
+			}
+
 		}
+
+		else {
+			var needLogin=new gui.MenuItem({
+				  type: "normal", 
+				  label: "需要登陸",
+				})
+
+				needLogin.enabled=false;
+
+				contextMenu.append(needLogin);
+		}
+
+		
 
 		contextMenu.append(new gui.MenuItem({ type: 'separator' })); // -4
 

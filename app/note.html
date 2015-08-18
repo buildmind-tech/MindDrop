@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="note">
+<head>
+	<meta charset="UTF-8">
+	<title>New Notes</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/textAngular.css">
+	<link rel="stylesheet" type="text/css" href="css/note.css">
+</head>
+<body ng-controller="MainCtrl">
+
+	<div class="note-header">
+		{{time}}
+	</div>
+
+	<text-angular ng-model="$content.html" ta-toolbar="[['bold','italics'],['insertImage','insertLink','insertVideo']]" ta-file-drop="drop($event)"></text-angular>
+
+
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/moment.min.js"></script>
+	<script type="text/javascript" src="js/textAngular/textAngular-rangy.min.js"></script>
+	<script type="text/javascript" src="js/textAngular/textAngular-sanitize.min.js"></script>
+	<script type="text/javascript" src="js/textAngular/textAngular.min.js"></script>
+	
+
+	<script type="text/javascript">
+
+	/**
+	* note Module
+	*
+	* Description
+	*/
+	window.gui = require('nw.gui');
+	window.win = gui.Window.get();	
+    gui.Screen.Init();
+    win.showDevTools();
+
+	angular.module('note', ['textAngular']).
+	controller('MainCtrl', ['$scope','$content', function($scope,$content){
+		$scope.time=moment().format('MMM DD YYYY');
+
+		$scope.$content=$content;
+
+		$scope.drop=function(ev){
+			console.log(ev);
+		}
+
+	}])
+	.run(function($contextmenu){
+		angular.element(document).find('text-angular').bind('contextmenu',function(ev){
+			ev.preventDefault();
+			$contextmenu.popup(ev.x,ev.y);
+			return false;
+		})
+	})
+	.factory('$content', ['$rootScope', function($rootScope){
+		return {
+			html:'',
+		}
+	}])
+	.factory('$contextmenu', ['$rootScope','$content', function($rootScope,$content){
+			var contextMenu = new gui.Menu();
+			// upload file
+			var sendNoteItem = new gui.MenuItem({
+			  type: "normal", 
+			  label: "   發送便簽",
+			  icon:"app/icon/context-menu/new.png"
+			});
+
+			sendNoteItem.click=function(){
+				console.log($content.html);
+			}
+
+			contextMenu.append(sendNoteItem); 
+
+			contextMenu.append(new gui.MenuItem({ type: 'separator' }));
+
+			var deleteNotice = new gui.MenuItem({
+			  type: "normal", 
+			  label: "   刪除便簽",
+			  icon:"app/icon/context-menu/delete.png"
+			});
+
+			deleteNotice.click=function(){
+				win.close();
+			}
+
+			contextMenu.append(deleteNotice); 
+
+
+
+			var popup=function(x,y){
+				contextMenu.popup(x,y);
+			}
+
+
+
+			return {
+				popup:popup
+			}
+
+	}])
+	</script>
+</body>
+</html>
+
