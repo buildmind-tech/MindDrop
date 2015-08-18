@@ -19,6 +19,9 @@ You can directly crop a part of screen and share the image.
 
 You can start screen sharing anytime you like and people who uses chrome or firefox can directly watch it in their browsers through the links.
 
+## Simple Note Sending (Rich Text)
+
+You can directly send simple messages through our text editor to your local network users or registered user. In reduction to IM, this function will always stays at its own position.
 
 # Build!
 Clone to local and run 
