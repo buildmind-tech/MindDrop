@@ -51,10 +51,13 @@
 
     global.eventEmitter=window.eventEmitter;
 
+
+
 	  window.gui = require('nw.gui');
 		window.win = gui.Window.get();	
     gui.Screen.Init();
     win.showDevTools();
+    var note=require(process.cwd()+'\\app\\node\\note.js');
     window.screen=gui.Screen.screens[0];
     gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/auth/index.html", "", "", true)
     gui.App.addOriginAccessWhitelistEntry("app://minddrop/app/about.html", "", "", true)
@@ -129,6 +132,28 @@
       window.onlogin=function(){
           socket.connect();
       }
+
+      note.on('new:notes',function(note){
+        var new_win=gui.Window.open('note.html', {
+          position: 'center',
+          width: 300,
+          height: 280,
+          min_width:300,
+          min_height:280,
+          max_width:500,
+          max_height:500,
+          focus:true,
+          frame: false,
+          toolbar:false,
+          resizable:true,
+          icon:"app/icon/icon.png",
+        });
+
+        new_win.on('loaded',function(){
+          new_win.window.note=note;
+        })
+        
+      })
       
     })
 	</script>

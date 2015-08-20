@@ -10,11 +10,23 @@
 </head>
 <body ng-controller="MainCtrl">
 
-	<div class="note-header">
+	<div class="note-editor" ng-class="{'away':!editing}">
+		<div class="note-header">
 		{{time}}
+			<div class="note-send-button" ng-click="sendNotice($event)">發送</div>
+		</div>
+		<text-angular ng-model="$content.html" ta-toolbar="[['bold','italics'],['insertImage','insertLink','insertVideo']]" ta-file-drop="drop($event)"></text-angular>
+	</div>
+	<div class="note-send-list" ng-class="{'in':!editing}">
+		<div class="note-header">
+		選擇發送人
+			<div class="note-edit-button" ng-click="editNotice()">編輯</div>
+		</div>
+
+		<input type="text"> IP
 	</div>
 
-	<text-angular ng-model="$content.html" ta-toolbar="[['bold','italics'],['insertImage','insertLink','insertVideo']]" ta-file-drop="drop($event)"></text-angular>
+	
 
 
 	<script type="text/javascript" src="js/angular.min.js"></script>
@@ -36,9 +48,12 @@
     gui.Screen.Init();
     win.showDevTools();
 
+
+
 	angular.module('note', ['textAngular']).
-	controller('MainCtrl', ['$scope','$content', function($scope,$content){
+	controller('MainCtrl', ['$scope','$content','$http', function($scope,$content,$http){
 		$scope.time=moment().format('MMM DD YYYY');
+		$scope.editing=true;
 
 		$scope.$content=$content;
 
@@ -46,13 +61,47 @@
 			console.log(ev);
 		}
 
+		$scope.sendNotice=function(ev){
+			$scope.editing=false;
+
+			$http.post('http://localhost:10087',{
+				html:$content.html
+			}).success(function(){
+				console.log('wtf good')
+			}).error(function(err){
+				console.log('wtf error')
+			})
+		}
+
+		$scope.$on('sendNotice',function(){
+			$scope.editing=false;
+		})
+
+		$scope.editNotice=function(){
+			$scope.editing=true;
+		}
+
 	}])
-	.run(function($contextmenu){
+	.controller('NoticeSendController', ['$scope','$timeout', function($scope,$timeout){
+		
+	}])
+	.run(function($contextmenu,$content,$rootScope,$timeout){
 		angular.element(document).find('text-angular').bind('contextmenu',function(ev){
 			ev.preventDefault();
 			$contextmenu.popup(ev.x,ev.y);
 			return false;
 		})
+
+		win.on('loaded',function(){
+	    	$timeout(function(){
+	    		console.log(window.note);
+	    		if (window.note && window.note!=''){
+					$content.html=window.note;
+				}
+	    	},0)
+	    })
+
+		
 	})
 	.factory('$content', ['$rootScope', function($rootScope){
 		return {
@@ -69,6 +118,8 @@
 			});
 
 			sendNoteItem.click=function(){
+				$rootScope.$broadcast('sendNotice');
+				$rootScope.$digest();
 				console.log($content.html);
 			}
 

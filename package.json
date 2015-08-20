@@ -18,8 +18,10 @@
     "min_height": 60
   },
   "dependencies": {
+    "archiver": "*",
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
     "lowdb": "^0.10.2",
-    "archiver":"*",
-    "socket.io-client":"*"
+    "socket.io-client": "*"
   }
 }
