@@ -11,9 +11,13 @@ The Mobile Application is built with [ionic](http://ionicframework.com/) with wo
 
 # Docs
 Docs are moving inside the folders for each platform.
+
 [Mobile Docs](https://github.com/buildmind-tech/MindDrop/blob/master/mobile/mobile.doc.md)
+
 [Desktop Docs](https://github.com/buildmind-tech/MindDrop/blob/master/app/desktop.doc.md)
+
 [Web Docs]()
+
 [Backend Docs]()
 
 # Build!
