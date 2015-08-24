@@ -46,3 +46,9 @@ nw-build.js
 
 # web
 web/bower_components
+
+# mobile
+mobile/hooks
+mobile/plugins
+mobile/scss
+mobile/www/lib
