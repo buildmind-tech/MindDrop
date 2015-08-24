@@ -1,11 +1,11 @@
 # MindDrop [![Build Status](https://travis-ci.org/buildmind-tech/MindDrop.svg?branch=master)](https://travis-ci.org/buildmind-tech/MindDrop)
 A Drop-And-Share Desktop App built on top of [node-webkit](https://github.com/nwjs/nw.js).
 
-![alt text](http://drop.buildmind.org/images/favicon.png "Mind-Drop")
+![alt text](http://drop.buildmind.org/favicon.png "Mind-Drop")
 
 # Features
 
-![alt text](http://drop.buildmind.org/images/sample.png "Mind-Drop")
+![alt text](http://drop.buildmind.org/sample.png "Mind-Drop")
 
 ## Drag-n-drop, then share your links.
 
