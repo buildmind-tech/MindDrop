@@ -1,6 +1,10 @@
 <html lang="en" ng-app="StarterApp">
 
 <head>
+    
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
     <meta name="viewport" content="initial-scale=1" />
@@ -77,13 +81,13 @@
     .factory('AuthInterceptor',['$rootScope','$location',function($rootScope,$location){
       return {
         request:function(request){
-
             if (request.method=="POST") {
                 console.log(request)
                 request.data.username=window.localStorage['username'];
                 request.data.userid=window.localStorage['userid'];
                 request.data.usersession=window.localStorage['usersession'];
             }
+            return request;
         }
       }
     }])
