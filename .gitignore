@@ -43,3 +43,6 @@ icudtl.dat
 
 nw-build.js
 *.7z
+
+# web
+web/bower_components

@@ -1,0 +1,20 @@
+{
+  "name": "web",
+  "version": "0.2.0-beta",
+  "homepage": "https://github.com/buildmind-tech/MindDrop",
+  "authors": [
+    "TonyHu <517838178@qq.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~0.10.1",
+    "ng-file-upload": "~7.0.10"
+  }
+}
