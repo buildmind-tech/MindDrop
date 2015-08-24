@@ -1,5 +1,11 @@
 # MindDrop [![Build Status](https://travis-ci.org/buildmind-tech/MindDrop.svg?branch=master)](https://travis-ci.org/buildmind-tech/MindDrop)
-A Drop-And-Share Desktop App built on top of [node-webkit](https://github.com/nwjs/nw.js).
+A Drop-And-Share Full Platform App (Web, Desktop & Mobile).
+
+The Web Application is built in [AngularJS](https://angularjs.org/) together with amazingly [ngMaterial](https://material.angularjs.org).
+
+The Desktop Application is built on top of [node-webkit](https://github.com/nwjs/nw.js).
+
+The Mobile Application is built with [ionic](http://ionicframework.com/) with wonderful [Apache Cordova](http://cordova.apache.org/) plugins.
 
 ![alt text](http://drop.buildmind.org/favicon.png "Mind-Drop")
 
@@ -24,11 +30,25 @@ You can start screen sharing anytime you like and people who uses chrome or fire
 You can directly send simple messages through our text editor to your local network users or registered user. In reduction to IM, this function will always stays at its own position.
 
 # Build!
+## For Desktop App
+
 Clone to local and run 
 
     npm install
     
-Then use nw binary to run the app
+Then use nw binary to run the app.
+
+## For Web App
+
+Deploy the `web` folder to any servers of your own.
+
+## For Mobile App
+
+If you are familiar with [ionic](http://ionicframework.com/), simply use the 'mobile' folder just like your other ionic projects. 
+
+Otherwise, you may want to check the [ionic start guide](http://ionicframework.com/getting-started/)
+
+
 
 # Backend
 
@@ -43,10 +63,6 @@ Server-side code is commited on Aug 14th.
 ## A server-less share
 
 All data are going through the [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel). This method is at first priority when both client are online.
-
-# Frontend
-
-The frontend is built in [AngularJS](https://angularjs.org/).
 
 # Why do we make this?
 
