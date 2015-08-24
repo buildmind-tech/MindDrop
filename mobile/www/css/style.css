@@ -1,1 +1,96 @@
 /* Empty. Add your own CSS if you like */
+ion-content .scroll {
+	height: 100%;
+}
+
+.center-notice {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform:translate(-50%,-50%);
+	text-align: center;
+}
+
+.minddrop-side-menu {
+	background-color: #353535;
+}
+
+.minddrop-side-menu ion-item,.minddrop-side-menu a.item-content {
+	background-color: transparent;
+}
+
+.minddrop-side-menu ion-item {
+	border: 0px;
+	color: #E0E0E0;
+	opacity: 0.6;
+}
+
+.minddrop-menu-list .list {
+	padding-top: 120px;
+}
+
+.minddrop-person-area {
+	width: 100%;
+	height: 120px;
+
+	padding-left: 100px;
+
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 1;
+	
+	color:white;
+}
+
+.person-empty-head {
+	width: 80px;
+    height: 80px;
+
+    position: absolute;
+    left: 10px;
+    top: 10px;
+
+    font-size: 60px;
+    background: rgba(224, 224, 224,0.6);
+    color: #353535;
+    border-radius: 50px;
+    border: 1px solid;
+}
+
+.person-empty-head:before {
+	margin: 8px 16px;
+}
+
+.minddrop-person-area h4 {
+	margin-top: 30px;
+	color: white;
+}
+
+.minddrop-settings {
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+
+	font-size: 16px;
+	color: grey;
+}
+
+.minddrop-settings:before{
+	margin: 0 5px;
+	font-size: 20px;
+}
+
+.minddrop-files-left {
+	width: 50%;
+	position:absolute;
+	top: 0;
+	left: 0;
+}
+
+.minddrop-files-right {
+	width: 50%;
+	position:absolute;
+	top: 0;
+	right: 0;
+}
