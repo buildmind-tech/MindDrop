@@ -18,7 +18,7 @@ Docs are moving inside the folders for each platform.
 
 [Web Docs]()
 
-[Backend Docs]()
+[Backend Docs](https://github.com/buildmind-tech/MindDrop/blob/master/server/server.doc.md)
 
 # Build!
 ## For Desktop App
