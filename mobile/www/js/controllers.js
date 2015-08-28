@@ -22,14 +22,18 @@ angular.module('starter.controllers', [])
   $scope.$on('authenticated',function(){
     $scope.User.name=window.localStorage['username'];
     $scope.User.session=window.localStorage['usersession'];
-    $drop.get($scope.currentSelection).then(function(data){
-      if (data){
-        $scope.files=data;
-      }
-      else {
-        $scope.files=[]
-      }
-    })
+    $scope.User.freespace=Math.ceil10((2-window.localStorage['freespace']/(1024*1024*1024)), -2)+"GB";
+    $timeout(function(){
+      $drop.get($scope.currentSelection).then(function(data){
+        if (data){
+          $scope.files=data;
+        }
+        else {
+          $scope.files=[]
+        }
+      })
+    },200)
+    
   })
 
 

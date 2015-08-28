@@ -1,5 +1,5 @@
 /* Empty. Add your own CSS if you like */
-ion-content .scroll {
+ion-content .scroll ,ion-scroll .scroll{
 	height: 100%;
 }
 

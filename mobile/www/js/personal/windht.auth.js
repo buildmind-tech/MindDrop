@@ -20,7 +20,7 @@ angular.module('windht.auth', [])
           window.localStorage['userid']=data.userid;
           window.localStorage['usersession']=data.usersession;
           window.localStorage['usernickname']=data.usernickname;
-
+          window.localStorage['freespace']=data.freespace;
           window.localStorage['loggedin']='true';
           q.resolve(data);
         }).error(function(err){
@@ -43,7 +43,8 @@ angular.module('windht.auth', [])
 	        }).success(function(data){
 	        	$rootScope.$broadcast('authenticated')
 	        	window.localStorage['loggedin']='true';
-	          	q.resolve(data);
+            window.localStorage['freespace']=data.freespace;
+	          q.resolve(data);
 	        }).error(function(err){
 	          	// window.localStorage['username']='';
 	          	// window.localStorage['userid']='';
