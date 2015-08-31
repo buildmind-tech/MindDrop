@@ -1,4 +1,4 @@
-angular.module('tonychol.imageviewDirective', ['ngFileUpload'])
+angular.module('tonychol.imageviewDirective', ['ngFileUpload','MindDrop.drop'])
     .factory('dropFilesService', [function() {
         var dropInstance = [{
             suffix: 'png',
