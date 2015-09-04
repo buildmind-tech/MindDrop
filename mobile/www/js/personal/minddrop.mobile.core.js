@@ -4,7 +4,9 @@
 * Description
 */
 angular.module('minddrop.mobile.core', []).
-factory('$drop', ['$rootScope','$http','$q', function($rootScope,$http,$q){
+factory('$drop', ['$rootScope','$http','$q','$cordovaFileTransfer', function($rootScope,$http,$q,$cordovaFileTransfer){
+
+	var server="http://drop.buildmind.org"
 
 	var get=function(type){
 		var q=$q.defer();
@@ -21,8 +23,61 @@ factory('$drop', ['$rootScope','$http','$q', function($rootScope,$http,$q){
 		return q.promise;
 	}
 
+	var getPicture=function(sourceType){
+		var q=$q.defer();
+		if (navigator.camera) {
+			
+			var options={ quality : 75,
+				destinationType : Camera.DestinationType.NATIVE_URI,
+				sourceType : sourceType,
+				allowEdit : true,
+				encodingType: Camera.EncodingType.JPEG,
+				targetWidth: 100,
+				targetHeight: 100,
+				saveToPhotoAlbum: true
+			};
+
+
+
+			navigator.camera.getPicture(
+			function(uri){
+				q.resolve(uri)
+			}, function(err){
+				q.reject(err);
+			},options)
+
+			
+		}
+		else {
+			q.reject();
+		}
+
+		return q.promise;
+	}
+
+	var upload=function(filePath){
+		var q=$q.defer();
+		var options={
+			params:{data:{username:window.localStorage['username'],userid:window.localStorage['userid'],usersession:window.localStorage['usersession']}}
+		};
+		$cordovaFileTransfer.upload(server+'/upload', filePath, options)
+		.then(function(result) {
+		// Success!
+			q.resolve(result)
+		}, function(err) {
+		// Error
+			q.reject(err);
+		}, function (progress) {
+		// constant progress updates
+			$rootScope.$broadcast('upload:process',progress)
+		});
+		return q.promise;
+	}
+
 	return {
-		get:get
+		get:get,
+		getPicture:getPicture,
+		upload:upload
 	}
 }])
 

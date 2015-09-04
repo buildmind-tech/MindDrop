@@ -93,7 +93,7 @@ angular.module('starter.controllers', [])
         $ionicActionSheet.show({
           buttons: [
             { text: 'Library' },
-            { text: 'Take Photo or Video' }
+            { text: 'Camera' }
           ],
           titleText: 'Choose Picture From',
           cancelText: 'Cancel',
@@ -104,8 +104,18 @@ angular.module('starter.controllers', [])
             console.log(index);
             switch (index) {
               case 0:
+                $drop.getPicture(0).then(function(uri){
+                  $drop.upload(uri).then(function(result){
+                    alert('upload finished!')
+                  });
+                })
                 break;
               case 1:
+                $drop.getPicture(1).then(function(uri){
+                  $drop.upload(uri).then(function(result){
+                    alert('upload finished!')
+                  });
+                })
                 break;
             }
             return true;

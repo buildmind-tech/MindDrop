@@ -77,12 +77,11 @@
     <script src="bower_components/ng-file-upload/ng-file-upload-all.min.js"></script>
 
     <script>
-    var app = angular.module('StarterApp', ['ngMaterial', 'tonychol.imageviewDirective'])
+    var app = angular.module('StarterApp', ['ngMaterial', 'tonychol.imageviewDirective','MindDrop.drop'])
     .factory('AuthInterceptor',['$rootScope','$location',function($rootScope,$location){
       return {
         request:function(request){
             if (request.method=="POST") {
-                console.log(request)
                 request.data.username=window.localStorage['username'];
                 request.data.userid=window.localStorage['userid'];
                 request.data.usersession=window.localStorage['usersession'];
@@ -95,8 +94,10 @@
         $httpProvider.interceptors.push('AuthInterceptor');
     }])
 
+
     </script>
     <script src="scripts/directives/tonycholImageviewDirective.js"></script>
+    <script src="scripts/drop.auth.js"></script>
 </body>
 
 </html>
