@@ -39,6 +39,12 @@ If you are familiar with [ionic](http://ionicframework.com/), simply use the 'mo
 
 Otherwise, you may want to check the [ionic start guide](http://ionicframework.com/getting-started/)
 
+## For Server Deployment
+
+In the server directory, run `npm install` and that will install all the dependencies you need.
+
+The entry point of backend is in `bin/www`, so next you can use `node bin/www` or `forever bin/www` to get the server up.
+
 # Why do we make this?
 
 * UI Practice
