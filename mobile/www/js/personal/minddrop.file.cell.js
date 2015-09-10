@@ -53,7 +53,7 @@ directive('file', ['$rootScope','$compile','$ionicPosition','$fileModal', functi
 
 			thumbnail.bind('click',function(e){
 				var offset=$ionicPosition.offset(thumbnail);
-				$fileModal.show(item_icon,offset)
+				$fileModal.show(thumbnail[0].src,offset)
 			})
 
 			container.append(thumbnail);
@@ -65,6 +65,8 @@ directive('file', ['$rootScope','$compile','$ionicPosition','$fileModal', functi
 .factory('$fileModal', ['$rootScope','$compile','$ionicScrollDelegate','$timeout', function($rootScope,$compile,$ionicScrollDelegate,$timeout){
 	var self=this;
 	var view;
+	var level,centerX,centerY;
+	var hiding;
 
 	var setView=function(_view){
 		view=_view;
@@ -72,38 +74,65 @@ directive('file', ['$rootScope','$compile','$ionicPosition','$fileModal', functi
 
 	var show=function(icon,offset){
 		if (view) {
+
+			$ionicScrollDelegate.$getByHandle('file-modal').zoomTo(1,false);
+
+			var close=view.find('a');
 			var img=view.find('img');
 			img[0].src=icon;
 
 			var section=view.find('section');
 
-			var level=offset.width/window.innerWidth;
-			var animate=false;
-			var originLeft=(offset.left);
-			var originTop=(offset.top+window.innerHeight/2-offset.top);
+			level=offset.width/window.innerWidth;
+			centerX=offset.left+offset.width/2;
+			centerY=offset.top+offset.height/2;
 
-			var webkitTransform='scale('+ level +')'
+			var webkitTransform='translate('+(centerX-window.innerWidth/2)+'px,'+(centerY-window.innerHeight/2)+'px)'+' scale('+ level +')'
+			console.log(webkitTransform);
 			section.css('webkitTransform',webkitTransform);
-
-			var centerX=offset.left+offset.width/2;
-			var centerY=offset.top+offset.height/2;
 
 			console.log('the centerX is '+centerX);
 			console.log('the centerY is '+centerY);
 
-			section.css('webkitTransformOrigin',(centerX/window.innerWidth)*100+'% '+(centerY/window.innerHeight)*100+'%')
+			$timeout(function(){
+				section.css('webkitTransition','all 0.5s ease');
+				section.css('webkitTransform','translate(0,0) scale(1)')
+				view.css('background','rgba(0,0,0,1)');
+			},100)
+
+			$timeout(function(){
+				close.css('display','block')
+			},500)
 
 			view.css('display','block')
-			// $ionicScrollDelegate.$getByHandle('file-modal').zoomBy(1, true);
+			
+
+			
+			
 		}
 		
 	}
 
 	var hide=function(){
+		if (!hiding){
+			if (view){
+				$ionicScrollDelegate.$getByHandle('file-modal').zoomTo(1,true);
+				hiding=true;
+				var section=view.find('section');
+				var webkitTransform='translate('+(centerX-window.innerWidth/2)+'px,'+(centerY-window.innerHeight/2)+'px)'+' scale('+ level +')'
+				console.log(webkitTransform);
+				section.css('webkitTransform',webkitTransform);
+				view.css('background','rgba(0,0,0,0)');
+				view.find('a').css('display','none')
+
+				$timeout(function(){
+					section.css('webkitTransition','all 0s ease');
+					view.css('display','none');
+					hiding=false;
+				},500)
+			}
+		}
 		
-		$timeout(function(){
-			view.css('display','none')
-		},500)
 	}
 
 	self={
@@ -124,8 +153,8 @@ directive('file', ['$rootScope','$compile','$ionicPosition','$fileModal', functi
 
 
 	// Debug
-	var show=function(level,animate,originLeft,originTop){
-		
+	var show=function(level,animate){
+		$ionicScrollDelegate.$getByHandle('file-modal').zoomTo(level,animate);
 	}
 
 	window.show=show;
@@ -136,7 +165,7 @@ directive('file', ['$rootScope','$compile','$ionicPosition','$fileModal', functi
 	// Runs during compile
 
 	var modalTpl='<div>'+
-	'<div class="ion-close" style="position:absolute;top:20px;right:20px;color:white;z-index: 1;" ng-click="hide()"></div>'+
+	'<a class="ion-close" style="display:none;font-size:25px;position:absolute;top:20px;right:20px;color:white;z-index: 1;" ng-click="hide()"></a>'+
 	'<ion-scroll min-zoom="0.2" delegate-handle="file-modal" zooming="true" direction="xy" style="width:100%; height:100%">'+
   	'<section style="width:100%;height:100%"><img style="width: 100%; max-height:100%;top:50%;position:relative;-webkit-transform:translate(0,-50%)" src="img/s-class-desktop.png"></section>'+
  	'</ion-scroll>'+
@@ -162,8 +191,10 @@ directive('file', ['$rootScope','$compile','$ionicPosition','$fileModal', functi
 			element.css('position','absolute');
 			element.css('top','0');
 			element.css('left','0');
-			element.css('background','rgba(0,0,0,0.5)');
 			element.css('z-index','100');
+
+			element.css('webkitTransition','all 0.5s ease');
+			element.css('background','rgba(0,0,0,0)');
 
 			element.css('display','none');
 
