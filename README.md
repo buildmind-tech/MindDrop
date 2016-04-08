@@ -3,7 +3,7 @@ A Drop-And-Share Full Platform App (Web, Desktop & Mobile).
 
 The Web Application is built in [AngularJS](https://angularjs.org/) together with amazingly [ngMaterial](https://material.angularjs.org).
 
-The Desktop Application in the repo is built on top of [node-webkit](https://github.com/nwjs/nw.js). It is now being reconstructed by electron for cleaner modullization.
+The Desktop Application in the repo is built on top of [node-webkit](https://github.com/nwjs/nw.js). It is now being reconstructed by [electron](https://github.com/atom/electron) for cleaner modullization.
 
 The Mobile Application is built with [ionic](http://ionicframework.com/) with wonderful [Apache Cordova](http://cordova.apache.org/) plugins.
 
@@ -55,4 +55,5 @@ The entry point of backend is in `bin/www`, so next you can use `node bin/www` o
 
 # Thanks
 * TonyChol
+* [Yummy Yang](https://github.com/oopsyummy)
 
